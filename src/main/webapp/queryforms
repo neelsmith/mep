@@ -1,0 +1,76 @@
+import edu.holycross.shot.mep.*
+
+
+// make this easily configurable...
+def serverUrl = "http://localhost:3030/ds/"
+
+String startPage = "urn:cite:hmt:msA.12r"
+String endPage = "urn:cite:hmt:msA.326v"
+MepGraph mepg = new MepGraph(serverUrl)
+def foliosList = mepg.getFoliosForRange(startPage,endPage)
+def sigla = mepg.getScholiaSigla()
+
+html.html {
+    head {
+        title("Mise en page: query forms")
+    }
+    
+    body {
+    
+    	header {
+            h1("Mise en page: query forms")
+    	}
+    	
+    	article {
+
+            p("Chart a range of folios in a bar chart (slow):")
+            form (action : "chart") {
+                label( 'for' : "folio1", "first folio")
+                select(name : "folio1", id : "folio1") {
+                    foliosList.each { f  ->
+                        option("${f}")
+                    }
+                }
+
+                label( 'for' : "folio2", "last folio")
+                select(name : "folio2", id : "folio2") {
+                    foliosList.each { f  ->
+                        option("${f}")
+                    }
+                }
+
+                label('for': "doc", "optionally, select a scholia document")
+
+                select(name : "doc", id : "doc") {
+                    option(selected : "selected", value : "", "-- all scholia --")
+                    sigla.each { s ->
+                        option("${s}")
+                    }
+                }
+                input('type' : "submit", value : "Chart")
+            }
+
+
+
+            p("Analyze a page:")
+	    p("Currently, pure XML reply:  no associated XSLT for human readers")
+            form (action : "svc") {
+                input ('type' : "hidden", name : "request", value : "page")
+                label( 'for' : "folio", "Folio page")
+                select(name : "urn", id : "folio") {
+                    foliosList.each { f  ->
+                        option("${f}")
+                    }
+                }
+                input('type' : "submit", value : "Analyze")
+            }
+            ul {
+                li ("Folio page")
+                li ("Page zone (TEB)")
+                li ("By Iliad book")
+                li("By scholion document")
+                li("Whole MS: sort by scholia, by words, by zone score")
+            }	
+        }
+    }
+}

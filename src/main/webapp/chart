@@ -1,0 +1,172 @@
+import edu.holycross.shot.mep.*
+import edu.harvard.chs.cite.CiteUrn
+
+// CONFIGURE THIS DYNAMICALLY:
+def serverUrl = "http://localhost:3030/ds/"
+def mepg = new MepGraph(serverUrl)
+
+// Bar chart configuration:
+def chartWPixels = 800
+def chartHPixels = 400
+
+
+/* Scale chart to maximum number of scholia: */
+def ymax = 150
+
+/* Average number of tokens per scholion,
+   used to scale token count to same bar chart
+   as scholia.
+*/
+def tokensToScholiaScale = 8
+
+// color settings
+def scholiaColor = "#CC1111"
+def tokensColor = "#11CCCC"
+def scoresColor = "#CC11CC"
+
+String urn1 = null
+String urn2 = null
+String docSiglum = null
+
+if (params["doc"]) {
+    docSiglum = params["doc"]
+}
+
+boolean urn1OK = true
+boolean urn2OK = true
+boolean urnsOK = false
+try {
+    CiteUrn folio1 = new CiteUrn(params["folio1"])
+    urn1 = folio1.toString()
+
+} catch (Exception e){
+    System.err.println "Bad folio1 param ${params[folio1]}"
+    urn1OK = false
+}
+
+try {
+    CiteUrn folio2 = new CiteUrn(params["folio2"])
+    urn2 = folio2.toString()
+} catch (Exception e){
+    System.err.println "Bad folio2 param"
+    urn2OK = false
+}
+
+if (urn1OK && urn2OK) {
+    urnsOK = true
+}
+
+def valList = []
+def folioList = mepg.getFoliosForRange(urn1, urn2)
+if (folioList.size() < 1) { urnsOK = false }
+if (urnsOK) {
+    folioList.each { f ->
+        CiteUrn folio = new CiteUrn(f)
+
+
+
+
+        def scoreSet
+        def tokenCount = 0
+        def scholiaCount = 0
+        if (docSiglum) {
+            tokenCount = mepg.countTokensForFolioDoc(folio, docSiglum) 
+            scholiaCount = mepg.countScholiaForFolioDoc(folio, docSiglum)
+            scoreSet = mepg.getScholiaScore(folio, docSiglum)
+
+        } else {
+            def tokeSet = mepg.getTokensForFolio(folio) 
+            tokenCount = tokeSet.size()
+            def scholSet = mepg.getScholiaForFolio(folio)
+            scholiaCount = scholSet.size()
+            scoreSet = mepg.getScholiaScore(folio)
+        }
+        def matches = 0
+        scoreSet.keySet().each { sch ->
+            if (scoreSet[sch] == true) {
+                matches++;
+            }
+        }
+        def dataSet = [scholiaCount, (tokenCount / tokensToScholiaScale), (ymax * matches / scoreSet.keySet().size() ) ]
+    valList.add(dataSet)
+  }
+}
+
+def scriptVar = new StringBuffer("""
+window.onload = function () {
+var bar5 = new RGraph.Bar('cvs',${valList});
+bar5.Set('labels', [
+""")
+
+folioList.eachWithIndex { f, i ->
+    CiteUrn u = new CiteUrn(f)
+    if (i > 0) {
+        scriptVar.append (", '" + u.getObjectId() + "'" )
+    } else {
+        scriptVar.append("'" + u.getObjectId() + "'")
+    }
+}
+
+
+StringBuffer tips = new StringBuffer()
+for (i in 1 .. folioList.size()) {
+    tips.append("'Number scholia', 'Number words (scaled)', 'Pct in zone (scaled)',")
+}
+
+scriptVar.append("""]);
+bar5.Set('tooltips', [${tips.toString()}]);
+bar5.Set('colors', ["${scholiaColor}", "${tokensColor}", "${scoresColor}"]);
+bar5.Set('strokestyle', 'transparent');
+bar5.Set('ymax', ${ymax});
+bar5.Draw();
+
+}
+""")
+
+html.html {
+    head {
+        title("Mise en page")
+        script( type: "text/javascript",  src: "rgraph/RGraph.common.core.js" , "")
+        script( type: "text/javascript",  src: "rgraph/RGraph.common.dynamic.js", "")
+        script( type: "text/javascript",  src: "rgraph/RGraph.common.tooltips.js","")
+        script( type: "text/javascript",  src: "rgraph/RGraph.bar.js", "")
+    }
+    
+    body {
+    	header {
+            h1("Mise en page: automated layout analysis")
+    	}
+    	
+    	article {
+            if (urnsOK) {
+                p("Folios ${urn1} - ${urn2}")
+                canvas (id: "cvs", width : "${chartWPixels}", height: "${chartHPixels}", "No canvas support")
+                script ("${scriptVar}")
+                h2("Key")
+                p("X axis:  folio (in document order)")
+                p ("X axis: ")
+                ul {
+                    li {
+                        span(style : "color : ${scholiaColor}", "number of scholia")
+                    }
+                    li {
+                        span(style : "color : ${tokensColor}", "number of words / ${tokensToScholiaScale}")
+                    }
+                    li {
+                        span(style : "color : ${scoresColor}", "pct in zone * ${ymax}")
+                    }
+                }
+            } else {
+                p("No data for requested folios.")
+                if (urn1OK == false) {
+                    p("Bad URN for first folio.")
+                }
+                if (urn2OK == false) {
+                    p("Bad URN for last folio.")
+                }
+
+            }
+        }
+        
+    }
+}

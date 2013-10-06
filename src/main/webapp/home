@@ -1,0 +1,30 @@
+
+html.html {
+    head {
+        title("Mise en page")
+    }
+    
+    body {
+    
+    	header {
+            h1("Mise en page: automated layout analysis")
+    	}
+    	
+    	article {
+            p("This site hosts services interpreting the layout of the Venetus A manuscript, using information from the HMT project RDF graph.")
+            p("(NB: As the HMT project's coverage of the Venetus A expands, results of queries to this service will change!)")
+	    p {
+                mkp.yield "See "
+                a(href : "queryforms", "forms for querying the service")
+                mkp.yield "."
+            }
+	    h2("Links to add")
+	    ul {
+                li ("More about this implementation.")
+                li ("Article from 'Built-upon' series.")
+                li ("README.")
+                li ("License information.")
+            }
+        }
+    }
+}

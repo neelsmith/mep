@@ -1,0 +1,5 @@
+
+ext {
+    //tripleserver = "http://localhost:3030/ds/"
+    tripleserver = "http://beta.hpcc.uh.edu:3030/ds/"
+}

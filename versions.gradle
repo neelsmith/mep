@@ -1,0 +1,19 @@
+
+
+
+
+ext {
+
+    citeVersion = "0.14.1"
+
+    hocuspocusversion = "0.4.5"
+
+    commonsioVersion = "1.4"
+    log4jVersion = "1.2.15"
+    groovyVersion = "2.0.6"
+    httpbuilderVersion = "0.5.2"
+
+
+
+    junitVersion = "4.8.2"
+}

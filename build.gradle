@@ -1,0 +1,62 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+apply from: "versions.gradle"
+apply from: "pub.gradle"
+
+
+
+apply from: "conf.gradle"
+
+repositories {
+    mavenCentral()
+    // for http builder:
+    maven {
+        url "http://repository.codehaus.org"
+    }
+    // for cite libs:
+    maven {
+        url "http://beta.hpcc.uh.edu/nexus/content/repositories/releases"
+    }
+}
+
+dependencies {
+    compile group: 'commons-io', name: 'commons-io', version: commonsioVersion
+    compile group: 'log4j', name: 'log4j', version: log4jVersion, ext: 'jar'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+    groovy  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+    groovy group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
+    groovy group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
+
+    runtime group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
+
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+}
+
+
+
+httpPort = 8080
+stopPort = 9451
+stopKey = 'foo'
+
+
+group = "edu.holycross.shot"
+version = "0.1.0"
+
+
+uploadArchives {
+  repositories.mavenDeployer {
+        repository(url: nexusRepo) {                   
+            authentication (userName: nexusUser, password: nexusPassword)
+        }
+    }
+}
+
+war {
+  filter(ReplaceTokens, tokens: [tripleserver: tripleserver])
+}
+
