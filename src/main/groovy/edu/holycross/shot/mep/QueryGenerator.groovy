@@ -14,6 +14,18 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+    String pageBlock(String folioUrnStr) {
+        return """
+select ?folio ?img ?imgroi ?pageblock WHERE {
+?img <http://www.homermultitext.org/cite/rdf/illustrates> ?folio .
+?img <http://www.homermultitext.org/cite/rdf/hasExtendedRef> ?imgroi .
+?imgroi <http://www.homermultitext.org/cite/rdf/illustrates> ?pageblock .
+
+FILTER (str(?folio) = "${folioUrnStr}")
+FILTER (regex(str(?pageblock),"urn:cite:hmt:pageroi"))
+}
+"""
+    }
 
     String orderedScholia(String folioUrnStr)  {
 

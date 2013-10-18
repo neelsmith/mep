@@ -95,7 +95,12 @@ class MepPage {
         }
     }
 
-
+    /**
+    * Gets ordered list of scholia from a specified
+    * document appearing on this page.
+    * @param urn CTS URN of the document.
+    * @returns An ordered list
+    */
     ArrayList scholiaForDocument(CtsUrn urn) {
         return scholiaMap[urn.toString()]
     }
@@ -103,21 +108,11 @@ class MepPage {
     /**
     * Gets ordered list of scholia from a specified
     * document appearing on this page.
-    * @param urnString URN value of the document.
+    * @param urnString String value of the document's CTS URN.
     * @returns An ordered list
     */
     ArrayList scholiaForDocument(String urnString) {
         return scholiaMap[urnString]
-/*
-        def scholGroup = []
-        scholionList.each { s ->
-            CtsUrn urn = new CtsUrn(s)
-            if (urn.getWork() == siglum) {
-                scholGroup.add(s)
-            }
-        }
-        return scholGroup
-*/
     }
 
     boolean scholMatchesIliad(String ctsUrnVal) {
@@ -196,14 +191,27 @@ class MepPage {
     }
 
 
+    /** Finds number of scholia in all documents on this page.
+    * @returns Number of scholia.
+    */
     Integer getNumScholia() {
         return countScholia()
     }
 
+
+
+    /** Finds number of scholia in a given document on this page.
+    * @param docUrn CtsUrn of the document.
+    * @returns Number of scholia.
+    */
     Integer getNumScholia(CtsUrn docUrn) {
         return this.scholiaMap[docUrn.toString()].size()
     }
 
+    /** Finds number of scholia in a given document on this page.
+    * @param docUrnString String value of CtsUrn of the document.
+    * @returns Number of scholia.
+    */
     Integer getNumScholia(String docUrnString) {
         return this.scholiaMap[docUrnString].size()
     }

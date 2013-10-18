@@ -55,6 +55,20 @@ class MepGraph {
     }
 
 
+
+    String getPageBlock(String pageUrnStr) {
+        String blockReply = getSparqlReply("application/json", qg.pageBlock(pageUrnStr))
+        CiteUrn img
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(blockReply)
+        parsedReply.results.bindings.each { b ->
+            System.err.println "BLOCK " + b.imgroi.value
+            img = new CiteUrn(b.imgroi.value)
+        }
+        return img.getExtendedRef()
+    }
+
     /** Gets a series of ordered lists of scholia.
     * The lists are collected in a map keyed by CTS URN for the
     * document.
