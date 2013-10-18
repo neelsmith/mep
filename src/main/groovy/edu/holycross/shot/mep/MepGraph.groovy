@@ -36,6 +36,9 @@ class MepGraph {
     }
 
 
+
+
+
     /** Submits "magic query" that discovers information
     * down to the token level.
     * @param pageUrnStr Page to query for.
@@ -50,8 +53,40 @@ class MepGraph {
     }
 
 
+    LinkedHashMap getScholia(CiteUrn urn) {
+        return getScholia(urn.toString())
+    }
 
-    ArrayList getScholia(String pageUrn) {
+
+    /** Gets a series of ordered lists of scholia.
+    *
+    * @param pageUrn URN of the page.
+    * @returns An ordered list of Iliad URNs.
+    */
+    LinkedHashMap getScholia(String pageUrn) {
+        def scholia = [:]
+        String q = this.qg.orderedScholia(pageUrn)
+        String scholiaReply = getSparqlReply("application/json",q)
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+
+        String currDoc = ""
+        parsedReply.results.bindings.each { b ->
+            if (currDoc != b.doc.value) {
+                currDoc = b.doc.value
+            }
+            if (scholia[currDoc]) {
+                def docList = scholia[currDoc]
+                docList.add(b.schol.value)
+                scholia[currDoc] = docList
+            } else {
+                def docList = ["${b.schol.value}"]
+                scholia[currDoc] = docList
+            }
+
+        }
+        return scholia
     }
 
     /** Gets an ordered list of Iliad URNs for a given page.

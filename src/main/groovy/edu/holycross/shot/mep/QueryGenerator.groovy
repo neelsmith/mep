@@ -14,6 +14,32 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+
+    String orderedScholia(String folioUrnStr)  {
+
+return """
+prefix cts:	<http://www.homermultitext.org/cts/rdf/> 
+prefix cite:	<http://www.homermultitext.org/cite/rdf/> 
+
+SELECT ?folio ?doc ?schol  ?scholSeq WHERE {
+?schol cite:appearsOn ?folio .
+
+?schol cts:hasSequence ?scholSeq .
+
+?schol <http://www.homermultitext.org/cts/rdf/belongsTo>    ?doc . 
+
+
+FILTER (str(?folio) = "${folioUrnStr}") .
+FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026") ) .
+
+}
+
+order by ?doc ?scholSeq 
+"""
+    }
+
+
+
     String orderedIliadLines(String folioUrnStr)  {
 
 return """
