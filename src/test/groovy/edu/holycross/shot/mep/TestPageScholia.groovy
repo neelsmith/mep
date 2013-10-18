@@ -36,6 +36,9 @@ class TestPageScholia extends GroovyTestCase {
     void testMepPage() {
         def graph = new MepGraph(serverUrl)
         MepPage pg = new MepPage(twelverecto, graph)   
+
+        CtsUrn mainScholia = new CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt")
+
         // add test on mapped scholia...
         def scholiaMap = pg.getScholiaMap()
         // keySet() not guaranteed to retain order, so test for
@@ -45,8 +48,9 @@ class TestPageScholia extends GroovyTestCase {
 
         // each document list should be ordered, so test for
         // list equivalence
-        def venAmain = scholiaMap["urn:cts:greekLit:tlg5026.msA.hmt"]
+        def venAmain = scholiaMap[mainScholia.toString()]
         assert venAmain == expectedMain
         
+        assert pg.scholiaForDocument(mainScholia) == expectedMain
     }
 }
