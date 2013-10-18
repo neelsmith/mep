@@ -38,8 +38,8 @@ Comparison of two theories
 
 | Feature | Maniaci theory | Churik theory |
 |---------|----------------|---------------|
-| *Scholia* zones | 3 equal zones per page | Top, exterior, bottom zones defined by *Iliad* text |
-| *Iliad* zones | 3 equal thirds of page | 6-7 lines for top and bottom, 12 for central ~ exterior |
+| *Scholia* zones | 3 equal thirds of page | Top, exterior, bottom zones defined by top and bottom of *Iliad* text block |
+| *Iliad* zones | 3 equal thirds of page | 6-7 lines for top and bottom, 12 for central zone (~ exterior  *scholia* zone) |
 
 Each theory predicts that, in general, *scholia* will fall in the same zone as the *Iliad* text they comment on.
 
