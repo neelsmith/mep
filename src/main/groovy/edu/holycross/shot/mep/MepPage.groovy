@@ -196,6 +196,18 @@ class MepPage {
     }
 
 
+    Integer getNumScholia() {
+        return countScholia()
+    }
+
+    Integer getNumScholia(CtsUrn docUrn) {
+        return this.scholiaMap[docUrn.toString()].size()
+    }
+
+    Integer getNumScholia(String docUrnString) {
+        return this.scholiaMap[docUrnString].size()
+    }
+
     /** Formats an xml report about this page. */
 /*
     String pageReport() {
