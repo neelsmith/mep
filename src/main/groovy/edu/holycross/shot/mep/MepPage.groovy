@@ -24,6 +24,11 @@ class MepPage {
     */
     def scholionList = []
 
+
+    /** Ordered lists of scholia for a folio
+    * in a map keyed by document URN. */
+    def scholiaMap = [:]
+
     /** CITE Image URN with ROI indicating
     * area of image representing the the folio page.
     */
@@ -73,6 +78,9 @@ class MepPage {
         this.urn = folioPage
         this.mepg = mepGraph
         this.iliadLines = mepg.getIliad(folioPage)
+        this.scholiaMap = mepg.getScholia(folioPage)
+
+        // Ditch this kludge:
         initializeData()
     }
 

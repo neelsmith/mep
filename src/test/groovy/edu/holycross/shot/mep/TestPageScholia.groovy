@@ -33,9 +33,20 @@ class TestPageScholia extends GroovyTestCase {
     }
 
 
-    void testPage() {
+    void testMepPage() {
         def graph = new MepGraph(serverUrl)
         MepPage pg = new MepPage(twelverecto, graph)   
         // add test on mapped scholia...
+        def scholiaMap = pg.getScholiaMap()
+        // keySet() not guaranteed to retain order, so test for
+        // set membership
+        def docList = scholiaMap.keySet() as Set
+        assert docList == expectedDocs as Set
+
+        // each document list should be ordered, so test for
+        // list equivalence
+        def venAmain = scholiaMap["urn:cts:greekLit:tlg5026.msA.hmt"]
+        assert venAmain == expectedMain
+        
     }
 }

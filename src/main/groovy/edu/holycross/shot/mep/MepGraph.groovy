@@ -39,6 +39,8 @@ class MepGraph {
 
 
 
+
+    // THIS SHOULD BE KILLED?
     /** Submits "magic query" that discovers information
     * down to the token level.
     * @param pageUrnStr Page to query for.
@@ -53,14 +55,21 @@ class MepGraph {
     }
 
 
+    /** Gets a series of ordered lists of scholia.
+    * The lists are collected in a map keyed by CTS URN for the
+    * document.
+    * @param urn URN of the page.
+    * @returns An ordered list of Iliad URNs.
+    */
     LinkedHashMap getScholia(CiteUrn urn) {
         return getScholia(urn.toString())
     }
 
 
     /** Gets a series of ordered lists of scholia.
-    *
-    * @param pageUrn URN of the page.
+    * The lists are collected in a map keyed by CTS URN for the
+    * document.
+    * @param pageUrn URN value, as a String, for the page.
     * @returns An ordered list of Iliad URNs.
     */
     LinkedHashMap getScholia(String pageUrn) {
