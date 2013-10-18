@@ -43,6 +43,8 @@ Comparison of two theories
 
 Each theory predicts that, in general, *scholia* will fall in the same zone as the *Iliad* text they comment on.
 
+For each page, we score each scholion as correctly or incorrectly predicted by each theory.
+
 
 
 

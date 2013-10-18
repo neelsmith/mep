@@ -50,6 +50,10 @@ class MepGraph {
     }
 
 
+
+    ArrayList getScholia(String pageUrn) {
+    }
+
     /** Gets an ordered list of Iliad URNs for a given page.
     * @param pageUrn URN of the page.
     * @returns An ordered list of Iliad URNs.
@@ -57,6 +61,8 @@ class MepGraph {
     ArrayList getIliad(CiteUrn pageUrn) {
         return getIliad(pageUrn.toString())
     }
+
+
 
     /** Gets an ordered list of Iliad URNs for a given page.
     * @param pageUrn URN value of the page.
