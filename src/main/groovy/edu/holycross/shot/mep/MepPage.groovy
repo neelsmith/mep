@@ -161,7 +161,7 @@ class MepPage {
                 commentsOn[schol] = b.il.value
             }
         }
-        this.numScholia = scholionList.size()
+        this.numScholia = countScholia()
 
         CiteUrn pgRoiUrn = new CiteUrn(pageRoI)
         def vals = pgRoiUrn.getExtendedRef().split(",")
@@ -171,7 +171,13 @@ class MepPage {
         
     }
 
-
+    Integer countScholia() {
+        Integer count = 0
+        this.scholiaMap.keySet().each { k ->
+            count = count + scholiaMap[k].size()
+        }
+        return count
+    }
 
 
     /** Formats an xml report about this page. */
