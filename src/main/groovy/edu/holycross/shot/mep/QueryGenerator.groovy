@@ -14,7 +14,13 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
-
+    // tested
+    /** Constructs a query to find image with RoI reference
+    * for block of Iliad text apearing on a page.
+    * @param folioUrnStr String value of page's CITE URN
+    * @returns SPARQL query to find image with RoI reference for Iliad 
+    * block.
+    */
     String iliadBlock(String folioUrnStr) {
         return """
 select ?folio ?img ?imgroi ?iliadblock WHERE {
@@ -28,6 +34,13 @@ FILTER (regex(str(?iliadblock),"urn:cite:hmt:textblock"))
 """
     }
 
+    // tested
+    /** Constructs a query to find image with RoI reference
+    * for physical page of Venetus A on an image.
+    * @param folioUrnStr String value of page's CITE URN.
+    * @returns SPARQL query to find image with RoI reference for
+    * physical page.
+    */
     String pageBlock(String folioUrnStr) {
         return """
 select ?folio ?img ?imgroi ?pageblock WHERE {
@@ -41,8 +54,14 @@ FILTER (regex(str(?pageblock),"urn:cite:hmt:pageroi"))
 """
     }
 
-
-String tokenCounts(String folioUrnStr) {
+    // tested
+    /** Constructs a query to find numbers of scholia
+    * on a physical page, grouped by scholia document.
+    * @param folioUrnStr String value of page's CITE URN.
+    * @returns SPARQL query to find numbers of scholia
+    * grouped by scholia document.
+    */
+    String tokenCounts(String folioUrnStr) {
 return """
 prefix cts:	<http://www.homermultitext.org/cts/rdf/> 
 prefix cite:	<http://www.homermultitext.org/cite/rdf/> 
@@ -60,6 +79,13 @@ GROUP BY ?doc
 """
 }
 
+    // tested
+    /** Constructs a query to find scholia
+    * on a physical page, in document order, and grouped by scholia document.
+    * @param folioUrnStr String value of page's CITE URN.
+    * @returns SPARQL query to find scholia on a page
+    * in document order, and grouped by scholia document.
+    */
     String orderedScholia(String folioUrnStr)  {
 
 return """
@@ -84,7 +110,13 @@ order by ?doc ?scholSeq
     }
 
 
-
+    // tested
+    /** Constructs a query to find Iliad lines
+    * on a physical page, in document order.
+    * @param folioUrnStr String value of page's CITE URN.
+    * @returns SPARQL query to find Iliad lines on a page
+    * in document order.
+    */
     String orderedIliadLines(String folioUrnStr)  {
 
 return """
@@ -104,6 +136,29 @@ FILTER (regex(str(?il), "urn:cts:greekLit:tlg0012") ) .
 order by ?ilSeq 
 """
     }
+
+    // tested
+    /** Constructs a query to find scholia on a given
+    * page together with Iliad lines they comment on.
+    * @param folioUrnStr String value of page's CITE URN.
+    * @returns SPARQL query to find Iliad lines on a page
+    * in document order.
+    */
+    String scholiaIliadLinks(String folioUrnStr) {
+return """
+prefix cts:	<http://www.homermultitext.org/cts/rdf/> 
+prefix cite:	<http://www.homermultitext.org/cite/rdf/> 
+
+select  ?scholion ?iliad WHERE {
+?scholion cite:appearsOn ?folio .
+
+?scholion <http://www.homermultitext.org/hmt/rdf/commentsOn>  ?iliad .
+FILTER (str(?folio) = "${folioUrnStr}")
+FILTER (regex(str(?scholion), "urn:cts:greekLit:tlg5026") ) .
+}
+"""
+    }
+
 
     String magicQueryForFolio(String folioUrnStr) {
 return """

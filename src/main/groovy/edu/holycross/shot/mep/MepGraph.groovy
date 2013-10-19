@@ -106,6 +106,21 @@ class MepGraph {
         return tokens
     }
 
+    LinkedHashMap getScholiaIliadMap(String pageUrnStr) {
+        def commentary = [:]
+        String q = this.qg.scholiaIliadLinks(pageUrnStr)
+        String scholiaReply = getSparqlReply("application/json",q)
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+
+        parsedReply.results.bindings.each { b ->
+            commentary[b.scholion.value] = b.iliad.value
+        }
+        return commentary
+
+    }
+    
 
     /** Gets a series of ordered lists of scholia.
     * The lists are collected in a map keyed by CTS URN for the
