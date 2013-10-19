@@ -13,8 +13,8 @@ import edu.harvard.chs.cite.CtsUrn
 class MepPage {
 
     /** Unequal zones in Churik hypothesis */
-    enum ChurikZone {
-        TOP, EXTERIOR, BOTTOM
+    enum PageZone {
+        TOP, MIDDLE, BOTTOM
     }
 
     /** Graph object to query.*/
@@ -62,6 +62,8 @@ class MepPage {
     * on default image. */
     BigDecimal pageHeight
 
+    def maniaciZones = [:]
+
     /** Constructor initializes all data for this folio page.
     * @param folioPage URN of page to analyze.
     * @param mepGraph Graph object providing data.
@@ -79,10 +81,20 @@ class MepPage {
         this.pageRoI = mepg.getPageBlock(folioPage)
         // set pageTop and pageHeight values:
         calculatePageDimm()
+        calculateManiaciZones()
+        // calculateChurikZones()
     }
 
-
-
+    // exactly one third of height, plus top
+    // 
+    void calculateManiaciZones() {
+        def thirds = pageHeight.div(3)
+        System.err.println "One third of height = " + thirds
+        System.err.println "Zone 1 lower = " + (pageTop + thirds).toString()
+        maniaciZones[PageZone.TOP] = pageTop + thirds
+        maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
+        maniaciZones[PageZone.BOTTOM] = pageTop + pageHeight
+    }
 
     /** Finds number of tokens in all scholia for this page.
     * @returns Number of tokens in all scholia for this page.
@@ -103,7 +115,6 @@ class MepPage {
     Integer countTokensForDocument(String urnString) {
         return tokenCounts[urnString]
     }
-
 
     /** Finds number of tokens in all scholia belonging
     * to a given scholia document.
@@ -177,14 +188,30 @@ class MepPage {
         return this.scholiaMap[docUrnString].size()
     }
 
+    def computeManiaciRanks(CtsUrn urn) {
+        return computeManiaciRanks(urn.toString())
+    }
+
+    def computeManiaciRanks(String urnString) {
+        def rankings = [:]
+        def scholia = getScholiaForDocument(urnString)
+        scholia.each { s ->
+            
+            // ranking is exact thirds of page height
+            rankings[s] = "unimplemented"
+        }
+        return rankings
+    }
+
 
     /* ********* BELOW HERE, METHODS ARE UNTESTED  ***************/
+
+/*
     boolean scholMatchesIliad(String ctsUrnVal) {
         ChurikZone scholZone = rankPosition(scholionPosition(ctsUrnVal))
         ChurikZone iliadZone  = rankPosition(iliadPosition(commentary[ctsUrnVal]))
         return scholZone == iliadZone
     }
-
 
     BigDecimal scholionPosition(String ctsUrnVal) {
         CiteUrn urn = new CiteUrn( roiForScholion[ctsUrnVal])
@@ -195,6 +222,7 @@ class MepPage {
         // divided by page height.
         return top / pageHeight
     }
+*/
 
     /** Computes the position of a given Iliad line
     * on the page as a quotient of its posiion and
@@ -205,6 +233,8 @@ class MepPage {
     * @returns Line position from top of page divided by total 
     * number of Iliadic lines.
     */
+
+/*
     BigDecimal iliadPosition(String ctsUrnVal) {
         Integer pos
         this.iliadLines.eachWithIndex { ln, index ->
@@ -214,7 +244,7 @@ class MepPage {
         }
         return (pos / iliadLines.size() )
     }
-
+*/
 
 
 
@@ -250,6 +280,7 @@ class MepPage {
         return writer.toString()
     }
 */
+/*
     ChurikZone rankPosition(BigDecimal pos) {
         if (pos > 0.75) {
             return ChurikZone.BOTTOM
@@ -259,5 +290,6 @@ class MepPage {
             return ChurikZone.TOP
         }
     }
+*/
 
 }
