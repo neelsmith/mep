@@ -46,8 +46,17 @@ Each theory predicts that, in general, *scholia* will fall in the same zone as t
 For each page, we score each scholion as correctly or incorrectly predicted by each theory.
 
 
+## Overview of code ##
 
+Detailed API docs can be built with the task `gradle groovydoc`.
 
+- The class `MepPage` models a physical page of the manuscript.
+- The class `MepGraph` represents the graph of relations that `mep` works with, and abstracts all interaction with the source of that graph in a SPARQL endpoint.
+- The class `QueryGenerator` forms SPARQL query strings for the various tasks that `MepGraph` requires.
+
+Typically therefore a `MepPage` assembles information about itself with requests for information from `MepGraph`; the `MepGraph` in turn queries its SPARQL endpoint to gather that information.
+
+Many unit tests test for the same expected data from both a `MepGraph` and a `MepPage`.
 
 
 
