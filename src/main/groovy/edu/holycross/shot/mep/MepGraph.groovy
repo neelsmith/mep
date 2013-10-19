@@ -23,11 +23,6 @@ class MepGraph {
     /** XML namespace for SPARQL vocabulary, as groovy Namespace object. */
     static groovy.xml.Namespace sparql = new groovy.xml.Namespace("http://www.w3.org/2005/sparql-results#")
 
-/*
-    enum ChurikZone {
-        TOP, EXTERIOR, BOTTOM
-    }
-*/
 
     /** Constructor initializing required value for SPARQL endpoint.   */
     MepGraph(String serverUrl) {
@@ -36,26 +31,18 @@ class MepGraph {
     }
 
 
-
-
-
-
-    // THIS SHOULD BE KILLED?
-    /** Submits "magic query" that discovers information
-    * down to the token level.
-    * @param pageUrnStr Page to query for.
-    * @returns An ArrayList of JSON bindings.
+    /** Gets region of interest of Iliad block on default image for page.
+    * @param urn CITE URN of the page.
+    * @returns A String with four comma-delimited values in CITE RoI format.
     */
-    ArrayList pageJson(String pageUrnStr) {
-        String folioReply = getSparqlReply("application/json", qg.magicQueryForFolio(pageUrnStr))
-
-        def slurper = new groovy.json.JsonSlurper()
-        def parsedReply = slurper.parseText(folioReply)
-        return parsedReply.results.bindings
+    String getIliadBlock(CiteUrn urn) {
+        return getIliadBlock(urn.toString())
     }
 
-
-
+    /** Gets region of interest of Iliad block on default image for page.
+    * @param pageUrnStr String value of the page's URN.
+    * @returns A String with four comma-delimited values in CITE RoI format.
+    */
     String getIliadBlock(String pageUrnStr) {
         String blockReply = getSparqlReply("application/json", qg.iliadBlock(pageUrnStr))
         CiteUrn img
@@ -69,7 +56,13 @@ class MepGraph {
     }
 
 
-
+    /** Gets region of interest of physical page on its default image.
+    * @param urn CITE URN of the page.
+    * @returns A String with four comma-delimited values in CITE RoI format.
+    */
+    String getPageBlock(CiteUrn urn) {
+        return getPageBlock(urn.toString())
+    }
 
     /** Gets region of interest of physical page on its default image.
     * @param pageUrnStr String value of the page's URN.
@@ -87,10 +80,27 @@ class MepGraph {
         return img.getExtendedRef()
     }
 
+    /** Finds number of tokens in each scholia document
+    * on a given page.  The HMT project's implementation of
+    * Greek tokenization gives an accurate word count for a
+    * passage of text.
+    * @param urn CITE URN of the page.
+    * @returns A map keyed by CTS URN of a scholia document, mapped
+    * to the number of tokens in that document.
+    */ 
     LinkedHashMap getTokenCounts(CiteUrn urn) {
         return getTokenCounts(urn.toString())
     }
 
+
+    /** Finds number of tokens in each scholia document
+    * on a given page.  The HMT project's implementation of
+    * Greek tokenization gives an accurate word count for a
+    * passage of text.
+    * @param pageUrnStr String value of the page's URN.
+    * @returns A map keyed by CTS URN of a scholia document, mapped
+    * to the number of tokens in that document.
+    */ 
     LinkedHashMap getTokenCounts(String pageUrnStr) {
         def tokens = [:]
         String q = this.qg.tokenCounts(pageUrnStr)
@@ -106,6 +116,24 @@ class MepGraph {
         return tokens
     }
 
+
+
+    /** Maps scholia on a give page to Iliad passage
+    * they comment on.
+    * @param pageUrnStr String value of the page's URN.
+    * @returns A map keyed by a scholion's CTS URN, mapped
+    * to a CTS URN of an Iliad passage
+    */
+    LinkedHashMap getScholiaIliadMap(CiteUrn urn) {
+        return getScholiaIliadMap(urn.toString())
+    }
+
+    /** Maps scholia on a give page to Iliad passage
+    * they comment on.
+    * @param pageUrnStr String value of the page's URN.
+    * @returns A map keyed by a scholion's CTS URN, mapped
+    * to a CTS URN of an Iliad passage
+    */
     LinkedHashMap getScholiaIliadMap(String pageUrnStr) {
         def commentary = [:]
         String q = this.qg.scholiaIliadLinks(pageUrnStr)
@@ -118,7 +146,6 @@ class MepGraph {
             commentary[b.scholion.value] = b.iliad.value
         }
         return commentary
-
     }
     
 
@@ -131,7 +158,6 @@ class MepGraph {
     LinkedHashMap getScholia(CiteUrn urn) {
         return getScholia(urn.toString())
     }
-
 
     /** Gets a series of ordered lists of scholia.
     * The lists are collected in a map keyed by CTS URN for the
@@ -172,8 +198,6 @@ class MepGraph {
     ArrayList getIliad(CiteUrn pageUrn) {
         return getIliad(pageUrn.toString())
     }
-
-
 
     /** Gets an ordered list of Iliad URNs for a given page.
     * @param pageUrn URN value of the page.
@@ -231,32 +255,7 @@ class MepGraph {
     }
 
 
-    /** Finds the default Image for a folio.
-    * @param urn CITE URN of the folio to find image for.
-    * @returns The CITE URN of the default image for this folio,
-    * as a String.
-    */
-
-    // NOT NEEDED
-/*
-    String getDefaultImg(CiteUrn urn) {
-        String imgUrnStr = null
-        String imgReply = getSparqlReply("application/json", qg.defaultImageQuery(urn))
-
-        def slurper = new groovy.json.JsonSlurper()
-        def parsedReply = slurper.parseText(imgReply)
-
-        parsedReply.results.bindings.each { b ->
-            if (b.img) {
-                imgUrnStr = b.img.value
-            }
-        }
-        return imgUrnStr
-    }
-
-*/
-
-
+    // untested
     /** Gets an ordered list of folio page URNs for a range 
     * of folios identified by CITE URN. 
     * @param firstPage URN value of the first folio page in the range.
@@ -274,6 +273,9 @@ class MepGraph {
         }
     }
 
+
+
+    // untested
     /** Gets an ordered list of folio page URNs for a range 
     * of folios identified by CITE URN. 
     * @param firstPage URN of the first folio page in the range.
@@ -297,6 +299,9 @@ class MepGraph {
         return folios
     }
 
+
+
+    // untested
     /** Gets an ordered list of folio page URNs for a manuscript.
     * @param msUrnStr A Collection-level URN value for a collection
     * of folio pages, where the collection identifies a single manuscript.
@@ -317,6 +322,22 @@ class MepGraph {
         return folioPages
 
     }
+
+    // THIS SHOULD BE KILLED?
+    /** Submits "magic query" that discovers information
+    * down to the token level.
+    * @param pageUrnStr Page to query for.
+    * @returns An ArrayList of JSON bindings.
+    */
+    ArrayList pageJson(String pageUrnStr) {
+        String folioReply = getSparqlReply("application/json", qg.magicQueryForFolio(pageUrnStr))
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(folioReply)
+        return parsedReply.results.bindings
+    }
+
+
     
 /*
     def getChurikScore(CiteUrn urn) {
