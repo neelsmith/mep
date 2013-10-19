@@ -51,6 +51,6 @@ class TestPageScholia extends GroovyTestCase {
         def venAmain = scholiaMap[mainScholia.toString()]
         assert venAmain == expectedMain
         
-        assert pg.scholiaForDocument(mainScholia) == expectedMain
+        assert pg.getScholiaForDocument(mainScholia) == expectedMain
     }
 }

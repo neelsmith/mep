@@ -12,6 +12,7 @@ import edu.harvard.chs.cite.CtsUrn
 */
 class MepPage {
 
+    /** Unequal zones in Churik hypothesis */
     enum ChurikZone {
         TOP, EXTERIOR, BOTTOM
     }
@@ -50,9 +51,8 @@ class MepPage {
     /** Number of tokens in scholia texts on page.*/
     Integer numTokens
 
-    // Not needed for MeP but very fun to have!
+    // Not needed (yet?) for mep but very fun to have!
     // def tokensByScholion = [:]
-
 
     /** Scale-independent value giving top of page
     * on default image.*/
@@ -75,25 +75,19 @@ class MepPage {
         this.commentary = mepg.getScholiaIliadMap(folioPage)
         this.roiForScholion = mepg.getScholiaRoIs(folioPage)
         this.numScholia = this.commentary.size()
-        this.numTokens = this.totalTokens()
+        this.numTokens = this.countTotalTokens()
         this.pageRoI = mepg.getPageBlock(folioPage)
         // set pageTop and pageHeight values:
         calculatePageDimm()
     }
 
 
-    ChurikZone rankPosition(BigDecimal pos) {
-        if (pos > 0.75) {
-            return ChurikZone.BOTTOM
-        } else if (pos > 0.25) {
-            return ChurikZone.EXTERIOR
-        } else {
-            return ChurikZone.TOP
-        }
-    }
 
 
-    Integer totalTokens() {
+    /** Finds number of tokens in all scholia for this page.
+    * @returns Number of tokens in all scholia for this page.
+    */
+    Integer countTotalTokens() {
         Integer count = 0
         this.tokenCounts.keySet().each { k ->
             count = count + tokenCounts[k]
@@ -101,14 +95,24 @@ class MepPage {
         return count
     }
 
-    Integer tokenCountForDocument(String urnString) {
+    /** Finds number of tokens in all scholia belonging
+    * to a given scholia document.
+    * @param urnString String value of document's CTS URN.
+    * @returns Number of tokens in all scholia for this page.
+    */
+    Integer countTokensForDocument(String urnString) {
         return tokenCounts[urnString]
     }
 
-    Integer tokenCountForDocument(CtsUrn urn) {
+
+    /** Finds number of tokens in all scholia belonging
+    * to a given scholia document.
+    * @param urn The document's CTS URN.
+    * @returns Number of tokens in all scholia for this page.
+    */
+    Integer countTokensForDocument(CtsUrn urn) {
         return tokenCounts[urn.toString()]
     }
-
     
     /**
     * Gets ordered list of scholia from a specified
@@ -116,7 +120,7 @@ class MepPage {
     * @param urn CTS URN of the document.
     * @returns An ordered list
     */
-    ArrayList scholiaForDocument(CtsUrn urn) {
+    ArrayList getScholiaForDocument(CtsUrn urn) {
         return scholiaMap[urn.toString()]
     }
     
@@ -126,13 +130,12 @@ class MepPage {
     * @param urnString String value of the document's CTS URN.
     * @returns An ordered list
     */
-    ArrayList scholiaForDocument(String urnString) {
+    ArrayList getScholiaForDocument(String urnString) {
         return scholiaMap[urnString]
     }
 
-
-
-
+    /** Initializes pageTop and pageHeight members.
+    */
     void calculatePageDimm() {
         def vals = this.pageRoI.split(",")
         this.pageTop = vals[1].toBigDecimal()
@@ -140,6 +143,39 @@ class MepPage {
         this.pageHeight = ht - this.pageTop
     }
 
+    /** Finds number of scholia in all documents on this page.
+    * @returns Number of scholia.
+    */
+    Integer countScholia() {
+        Integer count = 0
+        this.scholiaMap.keySet().each { k ->
+            count = count + scholiaMap[k].size()
+        }
+        return count
+    }
+
+    /** Finds number of scholia in all documents on this page.
+    * @returns Number of scholia.
+    */
+    Integer getNumScholia() {
+        return countScholia()
+    }
+
+    /** Finds number of scholia in a given document on this page.
+    * @param docUrn CtsUrn of the document.
+    * @returns Number of scholia.
+    */
+    Integer getNumScholia(CtsUrn docUrn) {
+        return this.scholiaMap[docUrn.toString()].size()
+    }
+
+    /** Finds number of scholia in a given document on this page.
+    * @param docUrnString String value of CtsUrn of the document.
+    * @returns Number of scholia.
+    */
+    Integer getNumScholia(String docUrnString) {
+        return this.scholiaMap[docUrnString].size()
+    }
 
 
     /* ********* BELOW HERE, METHODS ARE UNTESTED  ***************/
@@ -181,39 +217,7 @@ class MepPage {
 
 
 
-    /** Finds number of scholia in all documents on this page.
-    * @returns Number of scholia.
-    */
-    Integer countScholia() {
-        Integer count = 0
-        this.scholiaMap.keySet().each { k ->
-            count = count + scholiaMap[k].size()
-        }
-        return count
-    }
 
-    /** Finds number of scholia in all documents on this page.
-    * @returns Number of scholia.
-    */
-    Integer getNumScholia() {
-        return countScholia()
-    }
-
-    /** Finds number of scholia in a given document on this page.
-    * @param docUrn CtsUrn of the document.
-    * @returns Number of scholia.
-    */
-    Integer getNumScholia(CtsUrn docUrn) {
-        return this.scholiaMap[docUrn.toString()].size()
-    }
-
-    /** Finds number of scholia in a given document on this page.
-    * @param docUrnString String value of CtsUrn of the document.
-    * @returns Number of scholia.
-    */
-    Integer getNumScholia(String docUrnString) {
-        return this.scholiaMap[docUrnString].size()
-    }
 
     /** Formats an xml report about this page. */
 /*
@@ -246,4 +250,14 @@ class MepPage {
         return writer.toString()
     }
 */
+    ChurikZone rankPosition(BigDecimal pos) {
+        if (pos > 0.75) {
+            return ChurikZone.BOTTOM
+        } else if (pos > 0.25) {
+            return ChurikZone.EXTERIOR
+        } else {
+            return ChurikZone.TOP
+        }
+    }
+
 }
