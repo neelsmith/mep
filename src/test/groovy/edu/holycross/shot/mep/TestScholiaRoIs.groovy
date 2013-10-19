@@ -13,4 +13,6 @@ class TestScholiaRoIs extends GroovyTestCase {
     def serverUrl = "http://localhost:3030/ds/"
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
 
+    void testRoIs() {
+    }
 }
