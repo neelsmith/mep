@@ -56,6 +56,25 @@ class MepGraph {
 
 
 
+    String getIliadBlock(String pageUrnStr) {
+        String blockReply = getSparqlReply("application/json", qg.iliadBlock(pageUrnStr))
+        CiteUrn img
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(blockReply)
+        parsedReply.results.bindings.each { b ->
+            img = new CiteUrn(b.imgroi.value)
+        }
+        return img.getExtendedRef()
+    }
+
+
+
+
+    /** Gets region of interest of physical page on its default image.
+    * @param pageUrnStr String value of the page's URN.
+    * @returns A String with four comma-delimited values in CITE RoI format.
+    */
     String getPageBlock(String pageUrnStr) {
         String blockReply = getSparqlReply("application/json", qg.pageBlock(pageUrnStr))
         CiteUrn img
@@ -63,7 +82,6 @@ class MepGraph {
         def slurper = new groovy.json.JsonSlurper()
         def parsedReply = slurper.parseText(blockReply)
         parsedReply.results.bindings.each { b ->
-            System.err.println "BLOCK " + b.imgroi.value
             img = new CiteUrn(b.imgroi.value)
         }
         return img.getExtendedRef()

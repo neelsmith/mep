@@ -14,7 +14,6 @@ class TestPageBlock extends GroovyTestCase {
     MepGraph graph = new MepGraph(serverUrl)
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
 
-
     void testGraph() {
         String expectedRoI = "0.0417,0.0813,0.845,0.8813"
         assert  graph.getPageBlock(twelverecto.toString()) == expectedRoI

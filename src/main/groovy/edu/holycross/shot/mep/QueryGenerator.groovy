@@ -14,6 +14,20 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+
+    String iliadBlock(String folioUrnStr) {
+        return """
+select ?folio ?img ?imgroi ?iliadblock WHERE {
+?img <http://www.homermultitext.org/cite/rdf/illustrates> ?folio .
+?img <http://www.homermultitext.org/cite/rdf/hasExtendedRef> ?imgroi .
+?imgroi <http://www.homermultitext.org/cite/rdf/illustrates> ?iliadblock .
+
+FILTER (str(?folio) = "${folioUrnStr}")
+FILTER (regex(str(?iliadblock),"urn:cite:hmt:textblock"))
+}
+"""
+    }
+
     String pageBlock(String folioUrnStr) {
         return """
 select ?folio ?img ?imgroi ?pageblock WHERE {
