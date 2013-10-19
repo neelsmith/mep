@@ -29,6 +29,10 @@ class TestPageInit extends GroovyTestCase {
         assert pg.numTokens > pg.numScholia
         assert ((pg.pageTop > 0) && (pg.pageTop < 1))
         assert ((pg.pageHeight > 0) && (pg.pageHeight < 1))
+        for (zone in MepPage.PageZone.TOP..MepPage.PageZone.BOTTOM) {
+            assert pg.maniaciZones[zone] > 0
+            assert pg.maniaciZones[zone] < 1
+        }
     }
 
 }

@@ -13,10 +13,15 @@ class TestIliadBlock extends GroovyTestCase {
     def serverUrl = "http://localhost:3030/ds/"
     MepGraph graph = new MepGraph(serverUrl)
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
+    String expectedBlock = "0.0551,0.2305,0.5115,0.494"
 
     void testGraph() {
-        String expectedBlock = "0.0551,0.2305,0.5115,0.494"
         assert graph.getIliadBlock(twelverecto.toString())  == expectedBlock
+    }
+
+    void testPage() {
+        MepPage pg = new MepPage(twelverecto, graph)
+        assert pg.getIliadRoI() == expectedBlock
     }
 
 }

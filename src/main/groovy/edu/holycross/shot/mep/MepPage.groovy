@@ -40,10 +40,15 @@ class MepPage {
     */
     def roiForScholion = [:]
 
-    /** CITE Image URN with ROI indicating
-    * area of image representing the the folio page.
+    /** Four-element string indicating
+    * area of image representing the folio page.
     */
     String pageRoI
+
+    /** Four-element string indicating
+    * area of image representing the Iliad block.
+    */
+    String iliadRoI
 
     /** Number of scholia on page */
     Integer numScholia
@@ -62,7 +67,12 @@ class MepPage {
     * on default image. */
     BigDecimal pageHeight
 
+    /** Map, keyed by PageZone values, of lower bounds
+    * of Maniaci's three equal page zones.
+    */
     def maniaciZones = [:]
+
+    def churikZones = [:]
 
     /** Constructor initializes all data for this folio page.
     * @param folioPage URN of page to analyze.
@@ -79,21 +89,27 @@ class MepPage {
         this.numScholia = this.commentary.size()
         this.numTokens = this.countTotalTokens()
         this.pageRoI = mepg.getPageBlock(folioPage)
+        this.iliadRoI = mepg.getIliadBlock(folioPage)
         // set pageTop and pageHeight values:
         calculatePageDimm()
         calculateManiaciZones()
-        // calculateChurikZones()
+        calculateChurikZones()
     }
 
-    // exactly one third of height, plus top
-    // 
+    /** Computes lower bounds of three equal zones
+    * on the physical page, and assigns these values
+    * to the maniaciZones map, keyed by PageZone value.
+    */
     void calculateManiaciZones() {
         def thirds = pageHeight.div(3)
-        System.err.println "One third of height = " + thirds
-        System.err.println "Zone 1 lower = " + (pageTop + thirds).toString()
         maniaciZones[PageZone.TOP] = pageTop + thirds
         maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
         maniaciZones[PageZone.BOTTOM] = pageTop + pageHeight
+    }
+
+    // based on Iliad block
+    void calculateChurikZones() {
+        
     }
 
     /** Finds number of tokens in all scholia for this page.
