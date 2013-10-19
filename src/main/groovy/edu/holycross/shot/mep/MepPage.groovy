@@ -100,6 +100,14 @@ class MepPage {
     }
 
 
+    Integer totalTokens() {
+        Integer count = 0
+        this.tokenCounts.keySet().each { k ->
+            count = count + tokenCounts[k]
+        }
+        return count
+    }
+
     Integer tokenCountForDocument(String urnString) {
         return tokenCounts[urnString]
     }

@@ -42,5 +42,8 @@ class TestTokenCounts extends GroovyTestCase {
         assert tokenMap["urn:cts:greekLit:tlg5026.msA.hmt"] == expectedMain
         assert pg.tokenCountForDocument(mainScholia) == expectedMain
         assert pg.tokenCountForDocument(mainScholia.toString()) == expectedMain
+
+        Integer expectedTotal = 1210
+        assert pg.totalTokens() == expectedTotal
     }
 }
