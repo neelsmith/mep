@@ -5,7 +5,11 @@ import groovy.xml.MarkupBuilder
 import edu.harvard.chs.cite.CiteUrn
 import edu.harvard.chs.cite.CtsUrn
 
-
+/** Class representing a single physical page of the Venetus A manuscript.
+* A MepPage object draws on a MepGraph to collect information about the
+* physical page it represents, and analyzes that information according to
+* either of the Maniaci or Churik models.
+*/
 class MepPage {
 
     enum ChurikZone {
@@ -17,19 +21,23 @@ class MepPage {
 
     /** URN of the page to analyze */
     CiteUrn urn
+
+    /** An ordered list of Iliad lines appearing on this page. */
+    def iliadLines = []
     
-    /** Unordered list of URNs of scholia
-    * from all documents on this folio.
-    */
     /** Ordered lists of scholia for a folio
     * in a map keyed by document URN. */
     def scholiaMap = [:]
 
-    /** Counts of token keyed by document URN.*/
+    /** Numbers of token occuring in a group of scholia, keyed by document URN.*/
     def tokenCounts = [:]
 
     /** Map of scholion URNs to URNs of Iliad passages.*/
     def commentary = [:]
+
+    /** Map of RoI values for each scholion.
+    */
+    def roiForScholion = [:]
 
     /** CITE Image URN with ROI indicating
     * area of image representing the the folio page.
@@ -43,14 +51,6 @@ class MepPage {
     /** Scale-independent value giving height of page
     * on default image. */
     BigDecimal pageHeight
-
-    /** Map of RoI values for each scholion.
-    */
-    def roiForScholion = [:]
-
-
-    /** An ordered list of */
-    def iliadLines = []
 
     /** Number of scholia on page */
     Integer numScholia
@@ -74,9 +74,9 @@ class MepPage {
         this.tokenCounts = mepg.getTokenCounts(folioPage)
         this.commentary = mepg.getScholiaIliadMap(folioPage)
         this.roiForScholion = mepg.getScholiaRoIs(folioPage)
-
-        // Ditch this kludge:
-        //initializeData()
+        this.numScholia = this.commentary.size()
+        this.numTokens = this.totalTokens()
+        this.pageRoI = mepg.getPageBlock(folioPage)
     }
 
 

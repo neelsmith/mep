@@ -10,7 +10,7 @@ import static groovyx.net.http.Method.*
 
 
 
-/**  
+/**  Class abstracting access to the HMT project graph.
 */
 class MepGraph {
 
@@ -22,7 +22,6 @@ class MepGraph {
 
     /** XML namespace for SPARQL vocabulary, as groovy Namespace object. */
     static groovy.xml.Namespace sparql = new groovy.xml.Namespace("http://www.w3.org/2005/sparql-results#")
-
 
     /** Constructor initializing required value for SPARQL endpoint.   */
     MepGraph(String serverUrl) {
@@ -81,7 +80,6 @@ class MepGraph {
         return img.getExtendedRef()
     }
 
-
     /** Gets region of interest of physical page on its default image.
     * @param urn CITE URN of the page.
     * @returns A String with four comma-delimited values in CITE RoI format.
@@ -118,7 +116,6 @@ class MepGraph {
         return getTokenCounts(urn.toString())
     }
 
-
     /** Finds number of tokens in each scholia document
     * on a given page.  The HMT project's implementation of
     * Greek tokenization gives an accurate word count for a
@@ -141,8 +138,6 @@ class MepGraph {
         }
         return tokens
     }
-
-
 
     /** Maps scholia on a give page to Iliad passage
     * they comment on.
@@ -174,7 +169,6 @@ class MepGraph {
         return commentary
     }
     
-
     /** Gets a series of ordered lists of scholia.
     * The lists are collected in a map keyed by CTS URN for the
     * document.
@@ -281,7 +275,7 @@ class MepGraph {
     }
 
 
-    // untested
+    // ********EVERYTHING BELOW HERE IS UNTESTED ***************** 
     /** Gets an ordered list of folio page URNs for a range 
     * of folios identified by CITE URN. 
     * @param firstPage URN value of the first folio page in the range.
@@ -300,8 +294,6 @@ class MepGraph {
     }
 
 
-
-    // untested
     /** Gets an ordered list of folio page URNs for a range 
     * of folios identified by CITE URN. 
     * @param firstPage URN of the first folio page in the range.
@@ -327,7 +319,7 @@ class MepGraph {
 
 
 
-    // untested
+
     /** Gets an ordered list of folio page URNs for a manuscript.
     * @param msUrnStr A Collection-level URN value for a collection
     * of folio pages, where the collection identifies a single manuscript.
@@ -349,21 +341,8 @@ class MepGraph {
 
     }
 
-    // THIS SHOULD BE KILLED?
-    /** Submits "magic query" that discovers information
-    * down to the token level.
-    * @param pageUrnStr Page to query for.
-    * @returns An ArrayList of JSON bindings.
-    */
-    ArrayList pageJson(String pageUrnStr) {
-        String folioReply = getSparqlReply("application/json", qg.magicQueryForFolio(pageUrnStr))
 
-        def slurper = new groovy.json.JsonSlurper()
-        def parsedReply = slurper.parseText(folioReply)
-        return parsedReply.results.bindings
-    }
-
-
+    /* ****** EVERYTHING BELOW HERE BELONGS IN ANOTEHR CLASS ******** */
     
 /*
     def getChurikScore(CiteUrn urn) {
@@ -378,34 +357,6 @@ class MepGraph {
             }
         }
         return [totalTrue, totalFalse, scoreMap.keySet().size()]
-    }
-*/
-
-
-    /** Constructs a map of the number of scholia on a given folio.
-    *  for each scholia document.  The key to the map is the work component
-    *  the document's URN (e.g., "msA", "msAim").
-    * 
-    * @param urn The folio in question.
-    * @throws Exception if unable to parse the document identifier
-    * as a CTS URN.
-    */
-// not here
-/*
-    LinkedHashMap getScholiaPerDocForFolio(CiteUrn urn) {
-        def scholiaMap = [:]
-        String reply = getSparqlReply("application/json",qg.tokensPerDocOnFolioQuery(urn))
-        def slurper = new groovy.json.JsonSlurper()
-        def parsedReply = slurper.parseText(reply)
-        parsedReply.results.bindings.each { b ->
-            try {
-                CtsUrn doc = new CtsUrn(b.doc.value)
-                scholiaMap[doc.getWork(false)] = b.tokens.value
-            } catch (Exception e) {
-                throw new Exception("getScholiaPerDocForFolio: bad luck, ${e}")
-            }
-        }
-        return scholiaMap
     }
 */
 
