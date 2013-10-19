@@ -16,7 +16,7 @@ class TestPageInit extends GroovyTestCase {
 
 
 
-    void testGraph() {
+    void testPageInit() {
         MepPage pg = new MepPage(twelverecto, graph)
         assert pg.urn != null
         assert pg.iliadLines.size() > 0
@@ -27,15 +27,8 @@ class TestPageInit extends GroovyTestCase {
         assert pg.pageRoI != null
         assert pg.numScholia == pg.roiForScholion.size()
         assert pg.numTokens > pg.numScholia
+        assert ((pg.pageTop > 0) && (pg.pageTop < 1))
+        assert ((pg.pageHeight > 0) && (pg.pageHeight < 1))
     }
-
-    /*
-    Integer numTokens
-
-    BigDecimal pageTop
-    BigDecimal pageHeight
-
-
-    */
 
 }

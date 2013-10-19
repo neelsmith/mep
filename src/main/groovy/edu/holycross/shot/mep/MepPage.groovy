@@ -42,15 +42,7 @@ class MepPage {
     /** CITE Image URN with ROI indicating
     * area of image representing the the folio page.
     */
-    def pageRoI
-
-    /** Scale-independent value giving top of page
-    * on default image.*/
-    BigDecimal pageTop
-
-    /** Scale-independent value giving height of page
-    * on default image. */
-    BigDecimal pageHeight
+    String pageRoI
 
     /** Number of scholia on page */
     Integer numScholia
@@ -61,6 +53,14 @@ class MepPage {
     // Not needed for MeP but very fun to have!
     // def tokensByScholion = [:]
 
+
+    /** Scale-independent value giving top of page
+    * on default image.*/
+    BigDecimal pageTop
+
+    /** Scale-independent value giving height of page
+    * on default image. */
+    BigDecimal pageHeight
 
     /** Constructor initializes all data for this folio page.
     * @param folioPage URN of page to analyze.
@@ -77,6 +77,8 @@ class MepPage {
         this.numScholia = this.commentary.size()
         this.numTokens = this.totalTokens()
         this.pageRoI = mepg.getPageBlock(folioPage)
+        // set pageTop and pageHeight values:
+        calculatePageDimm()
     }
 
 
@@ -128,6 +130,19 @@ class MepPage {
         return scholiaMap[urnString]
     }
 
+
+
+
+    void calculatePageDimm() {
+        def vals = this.pageRoI.split(",")
+        this.pageTop = vals[1].toBigDecimal()
+        BigDecimal ht = vals[3].toBigDecimal()
+        this.pageHeight = ht - this.pageTop
+    }
+
+
+
+    /* ********* BELOW HERE, METHODS ARE UNTESTED  ***************/
     boolean scholMatchesIliad(String ctsUrnVal) {
         ChurikZone scholZone = rankPosition(scholionPosition(ctsUrnVal))
         ChurikZone iliadZone  = rankPosition(iliadPosition(commentary[ctsUrnVal]))
@@ -164,21 +179,7 @@ class MepPage {
         return (pos / iliadLines.size() )
     }
 
-    /** Retrieves "magic page query" from MepGraph, and
-    * puts its flattened results into data structures useful
-    * for MeP analysis. This is the method that turns intimate
-    * knowledge of the convoluted graph into usable data.
-    */
-/*    void initializeData() {
 
-// HOW TO CALCULATE PAGE BOUNDS:
-        CiteUrn pgRoiUrn = new CiteUrn(pageRoI)
-        def vals = pgRoiUrn.getExtendedRef().split(",")
-        pageTop = vals[1].toBigDecimal()
-        BigDecimal ht = vals[3].toBigDecimal()
-        pageHeight = ht - pageTop
-    }
-*/
 
     /** Finds number of scholia in all documents on this page.
     * @returns Number of scholia.
