@@ -14,6 +14,26 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+
+    /** Constructs a query to find image with RoI reference
+    * for each scholion on a given page.
+    * @param folioUrnStr String value of page's CITE URN
+    * @returns SPARQL query to find image with RoI reference for Iliad 
+    * block.
+    */
+    String scholiaRoIs(String folioUrnStr) {
+return """
+select ?imgroi  ?sch WHERE {
+?img <http://www.homermultitext.org/cite/rdf/illustrates> ?folio .
+?img <http://www.homermultitext.org/cite/rdf/hasExtendedRef> ?imgroi .
+?imgroi  <http://www.homermultitext.org/cite/rdf/illustrates> ?sch .
+FILTER (str(?folio) = "${folioUrnStr}")
+FILTER (regex(str(?sch), "urn:cts:greekLit:tlg5026"))
+}
+"""
+}
+
+
     // tested
     /** Constructs a query to find image with RoI reference
     * for block of Iliad text apearing on a page.
@@ -159,7 +179,7 @@ FILTER (regex(str(?scholion), "urn:cts:greekLit:tlg5026") ) .
 """
     }
 
-
+/*
     String magicQueryForFolio(String folioUrnStr) {
 return """
 prefix cts:	<http://www.homermultitext.org/cts/rdf/> 
@@ -188,7 +208,7 @@ FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026") ) .
 }
 """
     }
-
+*/
     // get folios for book : orderd series of urns
     // get folios for range : ordered series of urns
     // getIliadForFolio:  ordered series of lines

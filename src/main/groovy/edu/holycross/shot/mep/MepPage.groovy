@@ -8,7 +8,6 @@ import edu.harvard.chs.cite.CtsUrn
 
 class MepPage {
 
-
     enum ChurikZone {
         TOP, EXTERIOR, BOTTOM
     }
@@ -22,16 +21,12 @@ class MepPage {
     /** Unordered list of URNs of scholia
     * from all documents on this folio.
     */
-    def scholionList = []
-
-
     /** Ordered lists of scholia for a folio
     * in a map keyed by document URN. */
     def scholiaMap = [:]
 
     /** Counts of token keyed by document URN.*/
     def tokenCounts = [:]
-
 
     /** Map of scholion URNs to URNs of Iliad passages.*/
     def commentary = [:]
@@ -50,18 +45,8 @@ class MepPage {
     BigDecimal pageHeight
 
     /** Map of RoI values for each scholion.
-    * The key set for this map should be an
-    * identical set to scholionList. 
     */
     def roiForScholion = [:]
-
-
-    /** Map of Iliad line commented on
-    *  each scholion.
-    * The key set for this map should be an
-    * identical set to scholionList. 
-    */
-    def commentsOn  = [:]
 
 
     /** An ordered list of */
@@ -88,9 +73,10 @@ class MepPage {
         this.scholiaMap = mepg.getScholia(folioPage)
         this.tokenCounts = mepg.getTokenCounts(folioPage)
         this.commentary = mepg.getScholiaIliadMap(folioPage)
+        this.roiForScholion = mepg.getScholiaRoIs(folioPage)
 
         // Ditch this kludge:
-        initializeData()
+        //initializeData()
     }
 
 
@@ -144,7 +130,7 @@ class MepPage {
 
     boolean scholMatchesIliad(String ctsUrnVal) {
         ChurikZone scholZone = rankPosition(scholionPosition(ctsUrnVal))
-        ChurikZone iliadZone  = rankPosition(iliadPosition(commentsOn[ctsUrnVal]))
+        ChurikZone iliadZone  = rankPosition(iliadPosition(commentary[ctsUrnVal]))
         return scholZone == iliadZone
     }
 
@@ -183,28 +169,16 @@ class MepPage {
     * for MeP analysis. This is the method that turns intimate
     * knowledge of the convoluted graph into usable data.
     */
-    void initializeData() {
-        def pageBindings = mepg.pageJson("${urn.toString()}")
-        this.numTokens = pageBindings.size()
-        pageBindings.each { b ->
-            this.pageRoI = b.pageroi.value
-            def schol = b.schol.value
-            if (!scholionList.contains(schol)) {
-                scholionList.add(schol)
-                roiForScholion[schol] = b.scholroi.value
-                commentsOn[schol] = b.il.value
-            }
-        }
-        this.numScholia = countScholia()
+/*    void initializeData() {
 
+// HOW TO CALCULATE PAGE BOUNDS:
         CiteUrn pgRoiUrn = new CiteUrn(pageRoI)
         def vals = pgRoiUrn.getExtendedRef().split(",")
         pageTop = vals[1].toBigDecimal()
         BigDecimal ht = vals[3].toBigDecimal()
         pageHeight = ht - pageTop
-        
     }
-
+*/
 
     /** Finds number of scholia in all documents on this page.
     * @returns Number of scholia.
@@ -217,15 +191,12 @@ class MepPage {
         return count
     }
 
-
     /** Finds number of scholia in all documents on this page.
     * @returns Number of scholia.
     */
     Integer getNumScholia() {
         return countScholia()
     }
-
-
 
     /** Finds number of scholia in a given document on this page.
     * @param docUrn CtsUrn of the document.

@@ -30,6 +30,34 @@ class MepGraph {
         this.qg = new QueryGenerator()
     }
 
+    /** Gets region of interest for all scholia on a given page.
+    * @param pageUrnString String value of page URN.
+    * @returns A map keyed by scholion's CITE URN, mapped to
+    * an image urn including region of interest.
+    */
+    LinkedHashMap getScholiaRoIs(CiteUrn urn) {
+        return getScholiaRoIs(urn.toString())
+    }
+
+    /** Gets region of interest for all scholia on a given page.
+    * @param pageUrnString String value of page URN.
+    * @returns A map keyed by scholion's CITE URN, mapped to
+    * an image urn including region of interest.
+    */
+    LinkedHashMap getScholiaRoIs(String pageUrnString) {
+        def rois = [:]
+        String q = this.qg.scholiaRoIs(pageUrnString)
+        String scholiaReply = getSparqlReply("application/json",q)
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+        System.err.println "Submitted query " + q
+        parsedReply.results.bindings.each { b ->
+            System.err.println "BINDING " + b
+            rois[b.sch.value] = b.imgroi.value
+        }
+        return rois
+    }
 
     /** Gets region of interest of Iliad block on default image for page.
     * @param urn CITE URN of the page.
