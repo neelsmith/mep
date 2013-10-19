@@ -24,4 +24,15 @@ class TestCommentary extends GroovyTestCase {
         assert commentary["urn:cts:greekLit:tlg5026.msA.hmt:1.2"] == expectedLine
     }
 
+    void testPage() {
+        MepPage pg = new MepPage(twelverecto, graph)
+        def commentary = pg.getCommentary()
+
+        Integer expectedSize = 67
+        assert commentary.size() == expectedSize
+
+        String expectedLine = "urn:cts:greekLit:tlg0012.tlg001.msA:1.1"
+        assert commentary["urn:cts:greekLit:tlg5026.msA.hmt:1.2"] == expectedLine
+    }
+
 }

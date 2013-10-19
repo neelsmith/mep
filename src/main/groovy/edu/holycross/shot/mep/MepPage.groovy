@@ -32,6 +32,10 @@ class MepPage {
     /** Counts of token keyed by document URN.*/
     def tokenCounts = [:]
 
+
+    /** Map of scholion URNs to URNs of Iliad passages.*/
+    def commentary = [:]
+
     /** CITE Image URN with ROI indicating
     * area of image representing the the folio page.
     */
@@ -83,6 +87,7 @@ class MepPage {
         this.iliadLines = mepg.getIliad(folioPage)
         this.scholiaMap = mepg.getScholia(folioPage)
         this.tokenCounts = mepg.getTokenCounts(folioPage)
+        this.commentary = mepg.getScholiaIliadMap(folioPage)
 
         // Ditch this kludge:
         initializeData()
