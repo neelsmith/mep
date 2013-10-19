@@ -51,9 +51,7 @@ class MepGraph {
 
         def slurper = new groovy.json.JsonSlurper()
         def parsedReply = slurper.parseText(scholiaReply)
-        System.err.println "Submitted query " + q
         parsedReply.results.bindings.each { b ->
-            System.err.println "BINDING " + b
             rois[b.sch.value] = b.imgroi.value
         }
         return rois
