@@ -41,6 +41,25 @@ FILTER (regex(str(?pageblock),"urn:cite:hmt:pageroi"))
 """
     }
 
+
+String tokenCounts(String folioUrnStr) {
+return """
+prefix cts:	<http://www.homermultitext.org/cts/rdf/> 
+prefix cite:	<http://www.homermultitext.org/cite/rdf/> 
+
+select  ?doc (count(?token) AS ?num)  WHERE {
+?schol cite:appearsOn ?folio .
+?schol <http://www.homermultitext.org/cts/rdf/belongsTo>    ?doc .
+
+?token <http://www.homermultitext.org/hmt/rdf/psg>  ?schol . 
+FILTER (str(?folio) = "${folioUrnStr}")
+FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026") ) .
+}
+GROUP BY ?doc 
+
+"""
+}
+
     String orderedScholia(String folioUrnStr)  {
 
 return """

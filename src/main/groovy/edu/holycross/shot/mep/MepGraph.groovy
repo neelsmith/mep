@@ -87,6 +87,26 @@ class MepGraph {
         return img.getExtendedRef()
     }
 
+    LinkedHashMap getTokenCounts(CiteUrn urn) {
+        return getTokenCounts(urn.toString())
+    }
+
+    LinkedHashMap getTokenCounts(String pageUrnStr) {
+        def tokens = [:]
+        String q = this.qg.tokenCounts(pageUrnStr)
+        String scholiaReply = getSparqlReply("application/json",q)
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+
+        parsedReply.results.bindings.each { b ->
+            Integer count = b.num.value.toInteger()
+            tokens[b.doc.value] = count
+        }
+        return tokens
+    }
+
+
     /** Gets a series of ordered lists of scholia.
     * The lists are collected in a map keyed by CTS URN for the
     * document.

@@ -29,6 +29,9 @@ class MepPage {
     * in a map keyed by document URN. */
     def scholiaMap = [:]
 
+    /** Counts of token keyed by document URN.*/
+    def tokenCounts = [:]
+
     /** CITE Image URN with ROI indicating
     * area of image representing the the folio page.
     */
@@ -79,6 +82,7 @@ class MepPage {
         this.mepg = mepGraph
         this.iliadLines = mepg.getIliad(folioPage)
         this.scholiaMap = mepg.getScholia(folioPage)
+        this.tokenCounts = mepg.getTokenCounts(folioPage)
 
         // Ditch this kludge:
         initializeData()
@@ -95,6 +99,16 @@ class MepPage {
         }
     }
 
+
+    Integer tokenCountForDocument(String urnString) {
+        return tokenCounts[urnString]
+    }
+
+    Integer tokenCountForDocument(CtsUrn urn) {
+        return tokenCounts[urn.toString()]
+    }
+
+    
     /**
     * Gets ordered list of scholia from a specified
     * document appearing on this page.
