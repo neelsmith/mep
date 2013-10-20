@@ -6,13 +6,14 @@ import edu.harvard.chs.cite.CiteUrn
 import edu.harvard.chs.cite.CtsUrn
 
 /** Class representing a single physical page of the Venetus A manuscript.
-* A MepPage object draws on a MepGraph to collect information about the
-* physical page it represents, and analyzes that information according to
-* either of the Maniaci or Churik models.
+* A MepPage object draws on a MepGraph to collect all the information about the
+* physical page it represents necessary to analyze the layout of the page in
+* either of the Maniaci or Churik models.  Analyzing the layout is the
+* task of a MepLayout object.
 */
 class MepPage {
 
-    /** Unequal zones in Churik hypothesis */
+    /** Divisions of page in either Maniaci or Churik system. */
     enum PageZone {
         TOP, MIDDLE, BOTTOM
     }
@@ -20,7 +21,7 @@ class MepPage {
     /** Graph object to query.*/
     MepGraph mepg
 
-    /** URN of the page to analyze */
+    /** URN of the page to analyze. */
     CiteUrn urn
 
     /** An ordered list of Iliad lines appearing on this page. */
@@ -72,6 +73,11 @@ class MepPage {
     */
     def maniaciZones = [:]
 
+
+    /** Map, keyed by PageZone values, of lower bounds
+    * of three page zones defined by position of Iliad block
+    * in Churik's hypothesis.
+    */
     def churikZones = [:]
 
     /** Constructor initializes all data for this folio page.
@@ -81,19 +87,33 @@ class MepPage {
     MepPage(CiteUrn folioPage, MepGraph mepGraph ) {
         this.urn = folioPage
         this.mepg = mepGraph
-        this.iliadLines = mepg.getIliad(folioPage)
-        this.scholiaMap = mepg.getScholia(folioPage)
-        this.tokenCounts = mepg.getTokenCounts(folioPage)
-        this.commentary = mepg.getScholiaIliadMap(folioPage)
-        this.roiForScholion = mepg.getScholiaRoIs(folioPage)
+        this.iliadLines = mepg.getIliad(this.urn)
+        this.scholiaMap = mepg.getScholia(this.urn)
+        this.tokenCounts = mepg.getTokenCounts(this.urn)
+        this.commentary = mepg.getScholiaIliadMap(this.urn)
         this.numScholia = this.commentary.size()
         this.numTokens = this.countTotalTokens()
-        this.pageRoI = mepg.getPageBlock(folioPage)
-        this.iliadRoI = mepg.getIliadBlock(folioPage)
-        // set pageTop and pageHeight values:
+        this.pageRoI = mepg.getPageBlock(this.urn)
+        this.iliadRoI = mepg.getIliadBlock(this.urn)
+        
+        getRoIsForScholia()
+        // set pageTop and pageHeight values, and
+        // caclulate vertical zones:
         calculatePageDimm()
         calculateManiaciZones()
         calculateChurikZones()
+    }
+
+
+    /** For each scholion on this page, extracts RoI portion of
+    * mapped image, and stores that in the roiForScholion map.
+    */
+    void getRoIsForScholia() {
+        def roiMap =  mepg.getScholiaRoIs(this.urn)
+        roiMap.keySet().each { k ->
+            CiteUrn imgUrn = new CiteUrn(roiMap[k])
+            roiForScholion[k] = imgUrn.getExtendedRef()
+        }
     }
 
     /** Computes lower bounds of three equal zones
@@ -107,12 +127,14 @@ class MepPage {
         maniaciZones[PageZone.BOTTOM] = pageTop + pageHeight
     }
 
-    // based on Iliad block
+    /** Computes lower bounds of three zones on physical
+    * page defined by location of Iliad block, and assigns
+    * these values to the churikZones map, keyed by PageZone value.
+    */
     void calculateChurikZones() {
         def vals = this.iliadRoI.split(",")
         BigDecimal iliadTop = vals[1].toBigDecimal()
         BigDecimal iliadHt = vals[3].toBigDecimal()
-        //this.pageHeight = ht - this.pageTop
         churikZones[PageZone.TOP] = iliadTop
         churikZones[PageZone.MIDDLE] = iliadTop + iliadHt
         churikZones[PageZone.BOTTOM] = pageTop + pageHeight
@@ -210,108 +232,5 @@ class MepPage {
         return this.scholiaMap[docUrnString].size()
     }
 
-    def computeManiaciRanks(CtsUrn urn) {
-        return computeManiaciRanks(urn.toString())
-    }
-
-    def computeManiaciRanks(String urnString) {
-        def rankings = [:]
-        def scholia = getScholiaForDocument(urnString)
-        scholia.each { s ->
-            
-            // ranking is exact thirds of page height
-            rankings[s] = "unimplemented"
-        }
-        return rankings
-    }
-
-
-    /* ********* BELOW HERE, METHODS ARE UNTESTED  ***************/
-
-/*
-    boolean scholMatchesIliad(String ctsUrnVal) {
-        ChurikZone scholZone = rankPosition(scholionPosition(ctsUrnVal))
-        ChurikZone iliadZone  = rankPosition(iliadPosition(commentary[ctsUrnVal]))
-        return scholZone == iliadZone
-    }
-
-    BigDecimal scholionPosition(String ctsUrnVal) {
-        CiteUrn urn = new CiteUrn( roiForScholion[ctsUrnVal])
-        def vals = urn.getExtendedRef().split(",")
-        BigDecimal top = vals[1].toBigDecimal() - pageTop
-        // get page top, and page height.
-        // this position will be quotient of height from page top
-        // divided by page height.
-        return top / pageHeight
-    }
-*/
-
-    /** Computes the position of a given Iliad line
-    * on the page as a quotient of its posiion and
-    * the total number of lines. This quotient is
-    * directly comparable with the values for scholia
-    * position.
-    * @param ctsUrnVal URN, as a String, of the line.
-    * @returns Line position from top of page divided by total 
-    * number of Iliadic lines.
-    */
-
-/*
-    BigDecimal iliadPosition(String ctsUrnVal) {
-        Integer pos
-        this.iliadLines.eachWithIndex { ln, index ->
-            if (ln == ctsUrnVal) {
-                pos = index
-            }
-        }
-        return (pos / iliadLines.size() )
-    }
-*/
-
-
-
-
-    /** Formats an xml report about this page. */
-/*
-    String pageReport() {
-        def writer = new StringWriter()
-        def rept = new MarkupBuilder(writer)
-        def roiMap = mepg.getScholiaRois(this.urn)
-        rept.page() {
-            request {
-                page("${this.urn}")
-            }
-            reply {
-                folio("${this.urn}")
-                img("${mepg.getDefaultImg(this.urn)}")
-                def scoreMap = mepg.getScholiaScore(this.urn)
-                scoreMap.keySet().each { s ->
-                    scholion(urn : "${s}")  {
-                        if (scoreMap[s] == true) {
-                            score ("1")
-                        } else {
-                            score ("0")
-                        }
-                        roi("${roiMap[s]}")
-                    }
-                }
-                
-
-            }
-        }
-        return writer.toString()
-    }
-*/
-/*
-    ChurikZone rankPosition(BigDecimal pos) {
-        if (pos > 0.75) {
-            return ChurikZone.BOTTOM
-        } else if (pos > 0.25) {
-            return ChurikZone.EXTERIOR
-        } else {
-            return ChurikZone.TOP
-        }
-    }
-*/
 
 }

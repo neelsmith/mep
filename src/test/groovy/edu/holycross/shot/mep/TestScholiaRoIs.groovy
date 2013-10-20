@@ -16,6 +16,7 @@ class TestScholiaRoIs extends GroovyTestCase {
 
     Integer expectedSize = 67
     String expectedImageUrn = "urn:cite:hmt:vaimg.VA012RN-0013@0.14967545,0.55647936,0.65903016,0.23365826"
+String expectedRoIValue = "0.14967545,0.55647936,0.65903016,0.23365826"
 
     void testGraph() {
         def roiMap =  graph.getScholiaRoIs(twelverecto.toString()) 
@@ -27,6 +28,6 @@ class TestScholiaRoIs extends GroovyTestCase {
         MepPage pg = new MepPage(twelverecto, graph)
         def roiMap = pg.getRoiForScholion()
         assert roiMap.size() == expectedSize
-        assert roiMap["urn:cts:greekLit:tlg5026.msA.hmt:1.11"] == expectedImageUrn
+        assert roiMap["urn:cts:greekLit:tlg5026.msA.hmt:1.11"] == expectedRoIValue
     }
 }
