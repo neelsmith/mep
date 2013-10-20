@@ -14,6 +14,23 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+    /** Constructs a query to find in sequence all folio pages
+    * with edited scholia.
+    */
+    String buildEditedMS() {
+        return """
+SELECT ?pg ?seq (count(?schol) AS ?scholia) WHERE {
+?pg <http://www.homermultitext.org/cite/rdf/belongsTo> ?ms .
+?pg <http://purl.org/ontology/olo/core#item>  ?seq .
+?pg <http://www.homermultitext.org/cite/rdf/hasOnIt> ?schol .
+FILTER (str(?ms) = "urn:cite:hmt:msA")
+FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026"))
+}
+GROUP BY ?pg ?seq
+ORDER BY ?seq
+"""
+    }
+
 
     /** Constructs a query to find image with RoI reference
     * for each scholion on a given page.

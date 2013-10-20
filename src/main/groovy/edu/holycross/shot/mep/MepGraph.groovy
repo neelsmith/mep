@@ -29,6 +29,21 @@ class MepGraph {
         this.qg = new QueryGenerator()
     }
 
+    /** Gets an ordered list of all pages of the Venetus A
+    * MS that currently have editions of scholia on them.
+    */
+    ArrayList getEditedPages() {
+        String q = this.qg.buildEditedMS()
+        String scholiaReply = getSparqlReply("application/json",q)
+        def pageList = []
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+        parsedReply.results.bindings.each { b ->
+            pageList.add(b.pg.value)
+        }
+        return pageList
+    }
+
     /** Gets region of interest for all scholia on a given page.
     * @param pageUrnString String value of page URN.
     * @returns A map keyed by scholion's CITE URN, mapped to
