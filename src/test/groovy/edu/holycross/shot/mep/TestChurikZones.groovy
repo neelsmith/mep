@@ -14,13 +14,9 @@ class TestChurikZones extends GroovyTestCase {
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
     MepGraph graph = new MepGraph(serverUrl)
 
-    // Maniaci expected:
-    //    def expectedTop = 0.3479666667
-    //    def expectedMiddle = 0.6146333334
-    //    def expectedBottom = 0.8813
     def expectedTop = 0.2305
     def expectedMiddle = 0.7245
-    def expectedBottom = 0.8813
+    def expectedBottom = 0.9626
 
     void testZones() {
         MepPage pg = new MepPage(twelverecto, graph)
@@ -28,7 +24,7 @@ class TestChurikZones extends GroovyTestCase {
         assert zones[MepPage.PageZone.TOP] == expectedTop
         assert zones[MepPage.PageZone.MIDDLE] == expectedMiddle
         assert zones[MepPage.PageZone.BOTTOM] == expectedBottom
-        assert zones[MepPage.PageZone.BOTTOM] == pg.pageTop + pg.pageHeight
+        assert zones[MepPage.PageZone.BOTTOM] == pg.pageBottom
     }
 
 }

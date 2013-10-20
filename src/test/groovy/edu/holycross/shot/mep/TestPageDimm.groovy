@@ -13,14 +13,15 @@ class TestPageDimm extends GroovyTestCase {
     def serverUrl = "http://localhost:3030/ds/"
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
     MepGraph graph = new MepGraph(serverUrl)
-    def expectedHeight =  0.8000
+    
     def expectedTop = 0.0813
+    def expectedBottom = 0.9626
 
     void testGraph() {
         MepPage pg = new MepPage(twelverecto, graph)
-        System.err.println "Top " + pg.pageTop + ", height " + pg.pageHeight
+
         assert pg.pageTop == expectedTop
-        assert pg.pageHeight == expectedHeight
+        assert pg.pageBottom == expectedBottom
     }
 
 }

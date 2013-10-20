@@ -66,7 +66,7 @@ class MepPage {
 
     /** Scale-independent value giving height of page
     * on default image. */
-    BigDecimal pageHeight
+    BigDecimal pageBottom
 
     /** Map, keyed by PageZone values, of lower bounds
     * of Maniaci's three equal page zones.
@@ -97,7 +97,7 @@ class MepPage {
         this.iliadRoI = mepg.getIliadBlock(this.urn)
         
         getRoIsForScholia()
-        // set pageTop and pageHeight values, and
+        // set pageTop and pageBottom values, and
         // caclulate vertical zones:
         calculatePageDimm()
         calculateManiaciZones()
@@ -121,10 +121,14 @@ class MepPage {
     * to the maniaciZones map, keyed by PageZone value.
     */
     void calculateManiaciZones() {
-        def thirds = pageHeight.div(3)
+        def height = pageBottom - pageTop
+        def thirds = height.div(3)
+        System.err.println "Height of page = " + height
+        System.err.println "thirds = " + thirds
+
         maniaciZones[PageZone.TOP] = pageTop + thirds
         maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
-        maniaciZones[PageZone.BOTTOM] = pageTop + pageHeight
+        maniaciZones[PageZone.BOTTOM] = pageBottom
     }
 
     /** Computes lower bounds of three zones on physical
@@ -137,7 +141,7 @@ class MepPage {
         BigDecimal iliadHt = vals[3].toBigDecimal()
         churikZones[PageZone.TOP] = iliadTop
         churikZones[PageZone.MIDDLE] = iliadTop + iliadHt
-        churikZones[PageZone.BOTTOM] = pageTop + pageHeight
+        churikZones[PageZone.BOTTOM] = pageBottom
     }
 
     /** Finds number of tokens in all scholia for this page.
@@ -189,13 +193,13 @@ class MepPage {
         return scholiaMap[urnString]
     }
 
-    /** Initializes pageTop and pageHeight members.
+    /** Initializes pageTop and pageBottom members.
     */
     void calculatePageDimm() {
         def vals = this.pageRoI.split(",")
         this.pageTop = vals[1].toBigDecimal()
         BigDecimal ht = vals[3].toBigDecimal()
-        this.pageHeight = ht - this.pageTop
+        this.pageBottom = ht + this.pageTop
     }
 
     /** Finds number of scholia in all documents on this page.

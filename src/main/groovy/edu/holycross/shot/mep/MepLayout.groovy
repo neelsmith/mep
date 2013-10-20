@@ -56,7 +56,7 @@ class MepLayout {
 
             if (top < pg.pageTop) {
                 rankings[s] = null
-                System.err.println "rankScholia: ERROR : ${top} < ${pg.pageTop} (page top)."
+                System.err.println "rankScholia: ERROR on ${s}: ${top} < ${pg.pageTop} (page top)."
             } else if (top < zones[MepPage.PageZone.TOP]) {
                 rankings[s] = MepPage.PageZone.TOP
             } else if (top < zones[MepPage.PageZone.MIDDLE]) {
@@ -65,7 +65,7 @@ class MepLayout {
                 rankings[s] = MepPage.PageZone.BOTTOM
             } else {
                 rankings[s] = null
-                System.err.println "rankScholia: ERROR : ${top} > zones[MepPage.PageZone.BOTTOM] (page bottom)"
+                System.err.println "rankScholia: ERROR on ${s}: ${top} > ${zones[MepPage.PageZone.BOTTOM]} (page bottom)"
             }
         }
         return rankings
