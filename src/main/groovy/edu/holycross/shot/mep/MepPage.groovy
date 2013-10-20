@@ -123,9 +123,6 @@ class MepPage {
     void calculateManiaciZones() {
         def height = pageBottom - pageTop
         def thirds = height.div(3)
-        System.err.println "Height of page = " + height
-        System.err.println "thirds = " + thirds
-
         maniaciZones[PageZone.TOP] = pageTop + thirds
         maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
         maniaciZones[PageZone.BOTTOM] = pageBottom

@@ -71,6 +71,29 @@ class MepLayout {
         return rankings
     }
     
+    /** Finds difference between two maps presumed to have identical 
+    * keysets.  This is useful to compare Maniaci rankings and Churik
+    * rankings for a given set of scholia.
+    * @param mapA First map.
+    * @param mapB Second map.
+    * @returns A list of difference records.  Each record consists of a triplet,
+    * consisting of the shared key, the mapA value for the key and the
+    * mapB value for the key.
+    */
+    ArrayList compareMaps(LinkedHashMap mapA, LinkedHashMap mapB) {
+        def diffList = []
+
+        def keysA = mapA.keySet().sort()
+        def keysB = mapB.keySet().sort()
+        assert keysA == keysB
+        keysA.each { k ->
+            if (mapA[k] != mapB[k]) {
+                def record = [k, mapA[k], mapB[k]]
+                diffList.add(record)
+            }
+        }
+        return diffList
+    }
 
 
 // methods for ranking Iliad differ between manaici and churik:
