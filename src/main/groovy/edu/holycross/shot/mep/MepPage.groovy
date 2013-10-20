@@ -109,7 +109,13 @@ class MepPage {
 
     // based on Iliad block
     void calculateChurikZones() {
-        
+        def vals = this.iliadRoI.split(",")
+        BigDecimal iliadTop = vals[1].toBigDecimal()
+        BigDecimal iliadHt = vals[3].toBigDecimal()
+        //this.pageHeight = ht - this.pageTop
+        churikZones[PageZone.TOP] = iliadTop
+        churikZones[PageZone.MIDDLE] = iliadTop + iliadHt
+        churikZones[PageZone.BOTTOM] = pageTop + pageHeight
     }
 
     /** Finds number of tokens in all scholia for this page.
