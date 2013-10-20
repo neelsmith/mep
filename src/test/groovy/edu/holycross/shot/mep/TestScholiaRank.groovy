@@ -27,4 +27,17 @@ class TestScholiaRank extends GroovyTestCase {
         
     }
 
+    // run the same test using churikZones instead of Maniaci.
+    void testChurikRank() {
+        MepPage pg = new MepPage(twelverecto, graph)
+        MepLayout ml = new MepLayout(pg)
+
+        def mainScholiaRanks = ml.rankScholia(pg.getScholiaForDocument("urn:cts:greekLit:tlg5026.msA.hmt"), pg.churikZones)
+
+        assert mainScholiaRanks.size() == expectedMainCount
+        assert mainScholiaRanks["urn:cts:greekLit:tlg5026.msA.hmt:1.1"] == MepPage.PageZone.TOP
+        
+    }
+
+
 }
