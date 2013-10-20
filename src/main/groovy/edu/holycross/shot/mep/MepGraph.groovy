@@ -81,7 +81,8 @@ class MepGraph {
 
     /** Gets region of interest of Iliad block on default image for page.
     * @param pageUrnStr String value of the page's URN.
-    * @returns A String with four comma-delimited values in CITE RoI format.
+    * @returns A String with four comma-delimited values in CITE RoI format,
+    * or null if no Iliad block found.
     */
     String getIliadBlock(String pageUrnStr) {
         String blockReply = getSparqlReply("application/json", qg.iliadBlock(pageUrnStr))
@@ -92,7 +93,11 @@ class MepGraph {
         parsedReply.results.bindings.each { b ->
             img = new CiteUrn(b.imgroi.value)
         }
-        return img.getExtendedRef()
+        if (img != null) {
+            return img.getExtendedRef()
+        } else {
+            return null
+        }
     }
 
     /** Gets region of interest of physical page on its default image.
@@ -116,7 +121,11 @@ class MepGraph {
         parsedReply.results.bindings.each { b ->
             img = new CiteUrn(b.imgroi.value)
         }
-        return img.getExtendedRef()
+        if (img != null) {
+            return img.getExtendedRef()
+        } else {
+            return null
+        }
     }
 
     /** Finds number of tokens in each scholia document
@@ -149,7 +158,9 @@ class MepGraph {
 
         parsedReply.results.bindings.each { b ->
             Integer count = b.num.value.toInteger()
-            tokens[b.doc.value] = count
+            if (b.doc != null) {
+                tokens[b.doc.value] = count
+            }
         }
         return tokens
     }

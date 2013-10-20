@@ -121,24 +121,32 @@ class MepPage {
     * to the maniaciZones map, keyed by PageZone value.
     */
     void calculateManiaciZones() {
-        def height = pageBottom - pageTop
-        def thirds = height.div(3)
-        maniaciZones[PageZone.TOP] = pageTop + thirds
-        maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
-        maniaciZones[PageZone.BOTTOM] = pageBottom
+        if ((pageBottom != null) && (pageTop != null)) {
+            def height = pageBottom - pageTop
+            def thirds = height.div(3)
+            maniaciZones[PageZone.TOP] = pageTop + thirds
+            maniaciZones[PageZone.MIDDLE] = pageTop + 2*thirds
+            maniaciZones[PageZone.BOTTOM] = pageBottom
+        }
     }
 
+
+    // range is 23-27 lines, apart from very short 
+    // selections on book ending pages.
+    //
     /** Computes lower bounds of three zones on physical
     * page defined by location of Iliad block, and assigns
     * these values to the churikZones map, keyed by PageZone value.
     */
     void calculateChurikZones() {
-        def vals = this.iliadRoI.split(",")
-        BigDecimal iliadTop = vals[1].toBigDecimal()
-        BigDecimal iliadHt = vals[3].toBigDecimal()
-        churikZones[PageZone.TOP] = iliadTop
-        churikZones[PageZone.MIDDLE] = iliadTop + iliadHt
-        churikZones[PageZone.BOTTOM] = pageBottom
+        if (this.iliadRoI != null) {
+            def vals = this.iliadRoI.split(",")
+            BigDecimal iliadTop = vals[1].toBigDecimal()
+            BigDecimal iliadHt = vals[3].toBigDecimal()
+            churikZones[PageZone.TOP] = iliadTop
+            churikZones[PageZone.MIDDLE] = iliadTop + iliadHt
+            churikZones[PageZone.BOTTOM] = pageBottom
+        }
     }
 
     /** Finds number of tokens in all scholia for this page.
@@ -193,10 +201,12 @@ class MepPage {
     /** Initializes pageTop and pageBottom members.
     */
     void calculatePageDimm() {
-        def vals = this.pageRoI.split(",")
-        this.pageTop = vals[1].toBigDecimal()
-        BigDecimal ht = vals[3].toBigDecimal()
-        this.pageBottom = ht + this.pageTop
+        if (this.pageRoI  != null) {
+            def vals = this.pageRoI.split(",")
+            this.pageTop = vals[1].toBigDecimal()
+            BigDecimal ht = vals[3].toBigDecimal()
+            this.pageBottom = ht + this.pageTop
+        }
     }
 
     /** Finds number of scholia in all documents on this page.
