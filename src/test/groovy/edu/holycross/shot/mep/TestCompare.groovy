@@ -26,8 +26,6 @@ class TestCompare extends GroovyTestCase {
         def diffList = ml.compareMaps(mRanks, cRanks)
         assert diffList.size() == expectedDiffList.size()
         assert diffList == expectedDiffList
-
-
     }
 
 

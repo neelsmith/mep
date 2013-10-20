@@ -20,6 +20,32 @@ class MepLayout {
         this.pg = mepPage
     }
 
+    /** Finds difference between two maps with identical 
+    * keysets.  Although a generic functino, this is useful to 
+    * compare Maniaci rankings and Churik rankings for a given 
+    * set of scholia.
+    * @param mapA First map.
+    * @param mapB Second map.
+    * @returns A list of difference records.  Each record consists of a triplet,
+    * consisting of the shared key, the mapA value for the key and the
+    * mapB value for the key.
+    */
+    ArrayList compareMaps(LinkedHashMap mapA, LinkedHashMap mapB) {
+        def diffList = []
+
+        def keysA = mapA.keySet().sort()
+        def keysB = mapB.keySet().sort()
+        assert keysA == keysB
+        keysA.each { k ->
+            if (mapA[k] != mapB[k]) {
+                def record = [k, mapA[k], mapB[k]]
+                diffList.add(record)
+            }
+        }
+        return diffList
+    }
+
+
     /** 
     * Evaluates a list of scholia against a given map of 
     * zone values and assigns each scholion to one of the
@@ -70,42 +96,35 @@ class MepLayout {
         }
         return rankings
     }
-    
-    /** Finds difference between two maps presumed to have identical 
-    * keysets.  This is useful to compare Maniaci rankings and Churik
-    * rankings for a given set of scholia.
-    * @param mapA First map.
-    * @param mapB Second map.
-    * @returns A list of difference records.  Each record consists of a triplet,
-    * consisting of the shared key, the mapA value for the key and the
-    * mapB value for the key.
-    */
-    ArrayList compareMaps(LinkedHashMap mapA, LinkedHashMap mapB) {
-        def diffList = []
 
-        def keysA = mapA.keySet().sort()
-        def keysB = mapB.keySet().sort()
-        assert keysA == keysB
-        keysA.each { k ->
-            if (mapA[k] != mapB[k]) {
-                def record = [k, mapA[k], mapB[k]]
-                diffList.add(record)
+
+    // 6 18 6
+    // TEST FOR NUM LINES ON PAGE...?
+    // CHECK DENSITY OF SCHOLIA ZONE..?
+
+    LinkedHashMap computeChurikRankForIliad() {
+        def rankings = [:]
+        System.err.println "Page has " + pg.iliadLines.size() + " lines."
+        Integer count = 0
+        pg.iliadLines.each { ln ->
+            count++;
+            if (count < 7) {
+                rankings[ln] = MepPage.PageZone.TOP
+            } else if (count < 18) {
+                rankings[ln] = MepPage.PageZone.MIDDLE
+            } else {
+                rankings[ln] = MepPage.PageZone.BOTTOM
             }
         }
-        return diffList
+        return rankings
     }
-
+    
 
 // methods for ranking Iliad differ between manaici and churik:
 // maniaci is straight zone comparison.  Divide Iliad block by num lines,
 // churcik is by line count:  6, 18, 6
 /*
 
-    def computeChurikRankForIliad(CtsUrn urn) {
-        return computeChurikRankForIliad(urn.toString())
-    }
-    def computeChurikRankForIliad(String urnString) {
-    }
 
     def computeManiaciRankForIliad(CtsUrn urn) {
         return computeManiaciRankForIliad(urn.toString())
