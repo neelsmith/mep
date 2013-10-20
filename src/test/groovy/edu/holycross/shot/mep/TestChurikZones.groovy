@@ -14,9 +14,10 @@ class TestChurikZones extends GroovyTestCase {
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
     MepGraph graph = new MepGraph(serverUrl)
 
-//    def expectedTop = 0.3479666667
-//    def expectedMiddle = 0.6146333334
-//    def expectedBottom = 0.8813
+    // Maniaci expected:
+    //    def expectedTop = 0.3479666667
+    //    def expectedMiddle = 0.6146333334
+    //    def expectedBottom = 0.8813
     def expectedTop = 0.2305
     def expectedMiddle = 0.7245
     def expectedBottom = 0.8813
