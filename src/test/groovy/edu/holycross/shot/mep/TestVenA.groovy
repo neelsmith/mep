@@ -14,9 +14,12 @@ class TestVenA extends GroovyTestCase {
     CiteUrn twelverecto = new CiteUrn("urn:cite:hmt:msA.12r")
     MepGraph graph = new MepGraph(serverUrl)
 
+    // As of Oct., 2013, data on beta.hpcc.uh.edu
+    Integer expectedPages = 188
+
     void testMS() {
         MepMS venA = new MepMS(graph)
-        System.err.println "Currently edited pages with scholia: " + venA.pageSequence.size()
+        assert venA.pageSequence.size() == expectedPages
     }
 
 }
