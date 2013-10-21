@@ -98,6 +98,8 @@ class MepLayout {
     }
 
 
+    // ADD CONSTRAINTS BASED ON NUM LINES ON PAGE>
+    // only apply if >=23 and <=27
     // 6 18 6
     // TEST FOR NUM LINES ON PAGE...?
     // CHECK DENSITY OF SCHOLIA ZONE..?
@@ -123,16 +125,44 @@ class MepLayout {
 // methods for ranking Iliad differ between manaici and churik:
 // maniaci is straight zone comparison.  Divide Iliad block by num lines,
 // churcik is by line count:  6, 18, 6
-/*
 
 
-    def computeManiaciRankForIliad(CtsUrn urn) {
-        return computeManiaciRankForIliad(urn.toString())
+
+    def computeManiaciRankForIliad() {
+        def rankings = [:]
+        // can treat spacing of lines within Iliad block as equal,
+        // so divide ht of Iliad zone by num lines
+        def vals = pg.pageRoI.split(/,/)
+        BigDecimal iliadTop = vals[1].toBigDecimal()
+        BigDecimal iliadHt = vals[3].toBigDecimal()
+        Integer numLines = pg.iliadLines.size()
+        def lineSize = iliadHt.div(numLines)
+        
+        Integer count =  0
+        pg.iliadLines.each { ln ->
+           def lineTop = (count * lineSize) + iliadTop
+           count++;
+           System.err.println "COMPARE ${lineTop} to zones ${pg.churikZones}: "
+           
+           if (lineTop < pg.pageTop) {
+               rankings[ln] = null
+               System.err.println "rankScholia: ERROR on ${ln}: ${top} < ${pg.pageTop} (page top)."
+           } else if (lineTop < pg.churikZones[MepPage.PageZone.TOP]) {
+               rankings[ln] = MepPage.PageZone.TOP
+           } else if (lineTop < pg.churikZones[MepPage.PageZone.MIDDLE]) {
+                rankings[ln] = MepPage.PageZone.MIDDLE
+            }  else if (lineTop < pg.churikZones[MepPage.PageZone.BOTTOM]) {
+                rankings[ln] = MepPage.PageZone.BOTTOM
+            } else {s
+                rankings[ln] = null
+                System.err.println "rankScholia: ERROR on ${ln}: ${top} > ${pg.churikZones[MepPage.PageZone.BOTTOM]} (page bottom)"
+            }
+           System.err.println "\t${rankings[ln]}"
+        }
+        return rankings
     }
-    def computeManiaciRankForIliad(String urnString) {
-    }
 
-*/
+
 
 
 

@@ -23,6 +23,41 @@ class MepMS {
         this.pageSequence = graph.getEditedPages()
     }
 
+
+    LinkedHashMap surveyTokenCount(String docUrn) {
+        def lastIdx = pageSequence.size() - 1
+        def tokens = [:]
+        pageSequence.each { pg ->
+            CiteUrn pgUrn = new CiteUrn(pg)
+            MepPage mp = new MepPage(pgUrn, graph)
+            tokens[pg] = mp.tokenCounts[docUrn]
+            if (mp.tokenCounts[docUrn] < 1) {
+                System.err.println "${pg} has NO TOKENS in document ${docUrn}."
+            } else {
+                System.err.println "${pg}: ${tokens[pg]} tokens."
+            }
+        }
+        return tokens
+    }
+
+
+    LinkedHashMap surveyScholiaCount(String docUrn) {
+        def lastIdx = pageSequence.size() - 1
+        def scholiaCount = [:]
+        pageSequence.each { pg ->
+            CiteUrn pgUrn = new CiteUrn(pg)
+            MepPage mp = new MepPage(pgUrn, graph)
+            def scholia = mp.getScholiaForDocument(docUrn)
+            if (scholia != null) {
+                scholiaCount[pg] = scholia.size()
+                System.err.println "${pg}: ${scholiaCount[pg]} scholia"
+            } else {
+                System.err.println "${pg} has NO SCHOLIA in document ${docUrn}."
+            }
+        }
+        return scholiaCount
+    }
+
     /** Maps number of lines of the Iliad on each edited
     * page.
     * @returns A map with with the number of Iliad lines
