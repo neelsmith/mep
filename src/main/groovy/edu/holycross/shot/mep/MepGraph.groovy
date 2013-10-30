@@ -100,6 +100,33 @@ class MepGraph {
         }
     }
 
+
+
+
+    String getDefaultImage(String pageUrnString) {
+        try {
+            CiteUrn urn = new CiteUrn (pageUrnString)
+            return getDefaultImage(urn)
+        } catch (Exception e) {
+            throw e
+        }
+    }
+
+    String getDefaultImage(CiteUrn pageUrn) {
+        String imgReply = getSparqlReply("application/json", qg.defaultImageQuery(pageUrn))
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(imgReply)
+        String reply = ""
+        parsedReply.results.bindings.each { b ->
+            reply = b.img.value
+        }
+        return reply
+    }
+
+
+
+
+
     /** Gets region of interest of physical page on its default image.
     * @param urn CITE URN of the page.
     * @returns A String with four comma-delimited values in CITE RoI format.
@@ -107,6 +134,8 @@ class MepGraph {
     String getPageBlock(CiteUrn urn) {
         return getPageBlock(urn.toString())
     }
+
+
 
     /** Gets region of interest of physical page on its default image.
     * @param pageUrnStr String value of the page's URN.

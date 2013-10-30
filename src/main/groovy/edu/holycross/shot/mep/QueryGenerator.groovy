@@ -453,10 +453,9 @@ FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026") ) .
 
     String defaultImageQuery(CiteUrn urn) {
         return """
-         ${MepDefinitions.prefixPhrase}
          SELECT ?img
          WHERE {
-         ?folio hmt:hasDefaultImage ?img .
+         ?folio  <http://www.homermultitext.org/hmt/rdf/hasDefaultImage>  ?img .
          FILTER (str(?folio) = "${urn}") .
          }
         """

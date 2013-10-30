@@ -24,6 +24,10 @@ class MepPage {
     /** URN of the page to analyze. */
     CiteUrn urn
 
+
+    /** Strinv value of URN of default image */
+    String img
+
     /** An ordered list of Iliad lines appearing on this page. */
     def iliadLines = []
     
@@ -95,7 +99,9 @@ class MepPage {
         this.numTokens = this.countTotalTokens()
         this.pageRoI = mepg.getPageBlock(this.urn)
         this.iliadRoI = mepg.getIliadBlock(this.urn)
-        
+        // add default image
+        this.img = mepg.getDefaultImage(this.urn)
+
         getRoIsForScholia()
         // set pageTop and pageBottom values, and
         // caclulate vertical zones:

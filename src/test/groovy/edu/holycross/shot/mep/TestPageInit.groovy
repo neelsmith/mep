@@ -19,6 +19,7 @@ class TestPageInit extends GroovyTestCase {
     void testPageInit() {
         MepPage pg = new MepPage(twelverecto, graph)
         assert pg.urn != null
+        assert pg.img == "urn:cite:hmt:vaimg.VA012RN-0013"
         assert pg.iliadLines.size() > 0
         assert pg.scholiaMap.size() > 0
         assert pg.tokenCounts.size() > 0

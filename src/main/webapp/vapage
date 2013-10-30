@@ -1,0 +1,43 @@
+import edu.holycross.shot.mep.*
+
+import edu.harvard.chs.cite.CtsUrn
+import edu.harvard.chs.cite.CiteUrn
+
+
+String contentType = "text/xml"
+response.setContentType(contentType)
+response.setHeader( "Access-Control-Allow-Origin", "*")
+
+boolean done = false
+
+
+String getVisualIndex(CiteUrn pageUrn) {
+    
+
+
+    StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${pageUrn}</urn></request>\n<reply>\n")
+    xml.append("<graph urn='" + pageUrn.toString() + "'>")
+
+    xml.append("</xml>\n")
+    xml.append("</reply>\n</citegraph>")
+                                        
+}
+
+
+CiteUrn pgUrn  = null
+if (request.getParameter("urn")) {
+    try {
+        pgUrn = new CiteUrn( request.getParameter("urn"))
+    } catch (Exception e) {
+        println("Need a valid 'urn' parameter:  got '" +pgUrn + "'.  ${e}")
+        done = true
+    }
+} else  {
+    println("Need a 'urn' parameter for the page to analyze.")
+    done = true
+}
+
+if (!done) {
+    println '<?xml-stylesheet type="text/xsl" href="xslt/index_image.xsl"?>\n'
+    println getVisualIndex(pgUrn)
+}
