@@ -13,7 +13,7 @@ ext {
     groovyVersion = "2.0.6"
     httpbuilderVersion = "0.5.2"
 
-
-
     junitVersion = "4.8.2"
+
+    ckVersion = "0.0.7"
 }

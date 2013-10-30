@@ -7,10 +7,10 @@ apply plugin: 'maven'
 
 apply from: "versions.gradle"
 apply from: "pub.gradle"
-
-
+apply from: "links.gradle"
 
 apply from: "conf.gradle"
+
 
 repositories {
     mavenCentral()
@@ -21,6 +21,13 @@ repositories {
     // for cite libs:
     maven {
         url "http://beta.hpcc.uh.edu/nexus/content/repositories/releases"
+    }
+}
+
+configurations {
+    ck {
+        description = "CITEKit configuration"
+        transitive = true
     }
 }
 
@@ -35,6 +42,8 @@ dependencies {
     runtime group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
+
+    ck group : "org.homermultitext", name : "citekit", version : ckVersion
 }
 
 
@@ -47,6 +56,11 @@ stopKey = 'foo'
 group = "edu.holycross.shot"
 version = "0.1.0"
 
+task setupCK (type: Copy ) {
+    from  zipTree(configurations.ck.files.asList()[0])
+    into "${buildDir}/tmp/jettyRunWar/webapp/citekit"
+}
+
 
 uploadArchives {
   repositories.mavenDeployer {
@@ -56,7 +70,24 @@ uploadArchives {
     }
 }
 
+
 war {
-  filter(ReplaceTokens, tokens: [tripleserver: tripleserver])
+//    filter(ReplaceTokens, tokens: [homeUrl: homeUrl, sparqls: sparqls, iipsrv : iipsrv, demoImage : demoImage, demoObject : demoObject, demoText : demoText, detailWidth: detailWidth, images : images, texts : texts, collections : collections, indices : indices, ict : ict, citekit : citekit, htmlheader : htmlheader, htmlfooter : htmlfooter, htmlnav : htmlnav, projectlabel : projectlabel, queryforms: queryforms, mooxslt: mooxslt])
+
+    filter(ReplaceTokens, tokens: [tripleserver : tripleserver, citekit : citekit, images : images])
+
+    from ("${buildDir}/tmp/jettyRunWar/webapp/citekit") {
+        into("citekit")
+    }
+
+
+    classpath sourceSets.main.output.classesDir
+    classpath configurations.runtime
 }
+
+
+jettyRunWar.dependsOn(setupCK)
+
+war.dependsOn(setupCK)
+
 

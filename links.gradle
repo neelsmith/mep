@@ -1,0 +1,20 @@
+/* Versions of dependencies for sparqlservlet
+*/
+
+
+project.ext {
+
+
+    texts = "http://beta.hpcc.uh.edu/tomcat/hmtcite/texts"
+    indices = "http://beta.hpcc.uh.edu/tomcat/hmtcite/indices"
+    collections = "http://beta.hpcc.uh.edu/tomcat/hmtcite/collections"
+    images = "http://beta.hpcc.uh.edu/tomcat/hmtcite/images"
+
+    ict = "http://beta.hpcc.uh.edu/tomcat/hmtcite/ict.html"     
+    queryforms = "http://beta.hpcc.uh.edu/tomcat/hmtcite/svcforms"
+    mooxslt = "xslt/citeimg_getiipmooviewer.xsl"        
+
+
+    citekit  = "http://localhost:8080/citeservlet/citekit/js/cite-jq.js"
+
+}

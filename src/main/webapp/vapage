@@ -8,17 +8,20 @@ String contentType = "text/xml"
 response.setContentType(contentType)
 response.setHeader( "Access-Control-Allow-Origin", "*")
 
+
+String serverUrl = "@tripleserver@"
+
 boolean done = false
 
 
-String getVisualIndex(CiteUrn pageUrn) {
-    
+String getVisualIndex(CiteUrn pageUrn, MepGraph sparql) {
+    MepPage pg = new MepPage(pageUrn, sparql)
+    String img = pg.getImg()
 
+    StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${img}</urn></request>\n<reply>\n")
+    xml.append("<graph urn='" + img + "'>")
 
-    StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${pageUrn}</urn></request>\n<reply>\n")
-    xml.append("<graph urn='" + pageUrn.toString() + "'>")
-
-    xml.append("</xml>\n")
+    xml.append("</graph>\n")
     xml.append("</reply>\n</citegraph>")
                                         
 }
@@ -39,5 +42,6 @@ if (request.getParameter("urn")) {
 
 if (!done) {
     println '<?xml-stylesheet type="text/xsl" href="xslt/index_image.xsl"?>\n'
-    println getVisualIndex(pgUrn)
+    MepGraph graph = new MepGraph(serverUrl)
+    println getVisualIndex(pgUrn, graph)
 }

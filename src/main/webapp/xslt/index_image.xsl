@@ -9,8 +9,8 @@
     
     
     <!-- Linking URLs for nav section -->
-    <xsl:variable name="homeUrl">http://beta.hpcc.uh.edu/tomcat/hmtcite/</xsl:variable>
-    <xsl:variable name="formsUrl">http://beta.hpcc.uh.edu/tomcat/hmtcite/svcforms</xsl:variable>
+    <xsl:variable name="homeUrl">@homeUrl@</xsl:variable>
+    <xsl:variable name="formsUrl">@queryforms@</xsl:variable>
     
     <!-- Variables for CSS Classes and HTML IDs -->
     <xsl:variable name="canvasId">canvas</xsl:variable>
@@ -25,9 +25,9 @@
     <xsl:variable name="thumbSize">150</xsl:variable>
     
     <!-- Variables for URLs of services, images, etc. -->
-    <xsl:variable name="imgURL">http://beta.hpcc.uh.edu/tomcat/hmtcite/images</xsl:variable>
-    <xsl:variable name="ictURL">http://beta.hpcc.uh.edu/tomcat/hmtcite/ict.html?urn=</xsl:variable>
-    <xsl:variable name="thisURL">http://beta.hpcc.uh.edu/tomcat/hmtcite/indices</xsl:variable>
+    <xsl:variable name="imgURL">@images@</xsl:variable>
+    <xsl:variable name="ictURL">@ict@?urn=</xsl:variable>
+    <xsl:variable name="thisURL">@indices@</xsl:variable>
     
     <!-- Variables for RDF verbs, etc. -->
     <xsl:variable name="illustratesVerb">http://www.homermultitext.org/cite/rdf/illustrates</xsl:variable>
@@ -49,7 +49,7 @@
     
     <!-- Variables from source XML -->
     <xsl:variable name="imageURN">
-        <xsl:value-of select="//citeindex:request/citeindex:urn"/>
+        <xsl:value-of select="//citeindex:reply/citeindex:graph/@urn"/>
     </xsl:variable>
    
     <xsl:template match="/">
@@ -57,7 +57,7 @@
             <head>
                 <meta charset="utf-8"/>
                 <title>CITE Index</title>
-                <link href="css/steely.css" rel="stylesheet"/>
+                <link href="css/steelyMep.css" rel="stylesheet"/>
                 <link href="css/graph.css" rel="stylesheet"/>
                 
                 <script src="js/jquery.min.js"/>
@@ -79,7 +79,7 @@
                 <script src="js/visinv.js" type="text/javascript"/>
                 <xsl:element name="script">
                     <xsl:attribute name="type">text/javascript</xsl:attribute>
-                   <xsl:attribute name="src">http://beta.hpcc.uh.edu/tomcat/hmtcite/citekit/js/cite-jq.js</xsl:attribute>
+                   <xsl:attribute name="src">@citekit@</xsl:attribute>
                     <!--<xsl:attribute name="src">http://localhost/citekit/js/cite-jq.js</xsl:attribute>-->
                  </xsl:element>
                
@@ -122,7 +122,7 @@
                         <xsl:apply-templates
                             select="//citeindex:reply/citeindex:graph/citeindex:sequence"/>
                     </div>
-                    <p style="clear: both;">- end data -</p>
+                    <!--<p style="clear: both;">- end data -</p>-->
                    
                 </div>
                 <div id="leftDiv">
@@ -152,15 +152,19 @@
                     <xsl:call-template name="makeCanvas"/>
                     
                     <div id="objects">
+                        <!--<h3>Others</h3>-->
                         <!--<xsl:apply-templates select="//citeindex:reply/citeindex:graph/citeindex:node[(@type = 'object') and (@v != 'http://www.homermultitext.org/cite/rdf/illustrates')]"
                         />-->
-                        Images: <xsl:apply-templates select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'image')]"
-                        mode="image"/>
-                        <br/>
-                        Objects: <xsl:apply-templates select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'object')]"
-                            mode="image"/><br/>
-                        Texts: <xsl:apply-templates select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'text')]"
-                            mode="text"/><br/>
+                        <ul><xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'image')]"
+                        >
+                            <li><strong>Image: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each>
+                        </ul>
+                        <ul><xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'object')]"
+                            ><li><strong>Object: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each>
+                        </ul>
+                        <ul>
+                        <!--Texts: --><xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'text')]"
+                            ><li><strong>Text: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each></ul>
                     </div>
                    
                 </div>
@@ -290,10 +294,7 @@
                         <xsl:attribute name="class"><xsl:value-of select="$objClass"/> text-column</xsl:attribute>
                         <xsl:attribute name="id"><xsl:value-of select="$objIdBase"/><xsl:value-of select="$thisId"/></xsl:attribute>
                         
-                        <!--<xsl:element name="img">
-                            <xsl:attribute name="class"><xsl:value-of select="$snipClass"/></xsl:attribute>
-                            <xsl:attribute name="src"><xsl:value-of select="$snipThumbURL"/><xsl:value-of select="@s"/></xsl:attribute>
-                        </xsl:element>-->
+             
                         
                         <xsl:choose>
                             <xsl:when test="$thisType = 'text'">
@@ -324,25 +325,6 @@
          </xsl:if>
     </xsl:template>
     
-   <!-- <xsl:template match="citeindex:node" mode="object">
-        <xsl:variable name="thisId"><xsl:value-of select="generate-id(.)"/></xsl:variable>
-        <div class="toggler">
-            <xsl:element name="a">
-                <xsl:attribute name="onclick">toggleThis("<xsl:value-of select="$thisId"/>")</xsl:attribute>
-                Show/Hide
-            </xsl:element>
-            <p class="long-text">Non-textual data mapped to this image</p>
-            <xsl:element name="div">
-                <xsl:attribute name="id"><xsl:value-of select="$thisId"/></xsl:attribute>
-                <xsl:element name="blockquote">
-                    <xsl:attribute name="cite"><xsl:value-of select="citeindex:value"/></xsl:attribute>
-                    <xsl:attribute name="class">cite-collection defaultobject</xsl:attribute>
-                    Label: <xsl:value-of select="citeindex:label"/><br/>
-                    Value: <xsl:value-of select="citeindex:value"/>
-                </xsl:element>
-            </xsl:element>
-        </div>
-    </xsl:template>-->
     
     <xsl:template match="citeindex:node" mode="show">
         <div>
@@ -353,25 +335,11 @@
     <xsl:template name="citekit-sources">
         
         <ul id="citekit-sources">
-            <li class="citekit-source cite-text citekit-default" id="defaulttext">http://beta.hpcc.uh.edu/tomcat/hmtcite/texts</li>
-            <li class="citekit-source cite-image citekit-default" data-image-w="900" id="defaultimage">http://beta.hpcc.uh.edu/tomcat/hmtcite/images</li>
-            <li class="citekit-source cite-collection citekit-default" id="defaultobject">http://beta.hpcc.uh.edu/tomcat/hmtcite/collections</li>
+            <li class="citekit-source cite-text citekit-default" id="defaulttext">@texts@</li>
+            <li class="citekit-source cite-image citekit-default" data-image-w="900" id="defaultimage">@images@</li>
+            <li class="citekit-source cite-collection citekit-default" id="defaultobject">@collections@</li>
         </ul>
-        <!--
-        <div id="citekit-additional-sources">
-            <p class="citekit-additional-source cite-cts" id="svc-graph-cts"
-                >http://beta.hpcc.uh.edu/tomcat/hmtcite/texts?request=GetPassagePlus&amp;urn=</p>
-            <p class="citekit-additional-source cite-img" id="svc-graph-img"
-                >http://beta.hpcc.uh.edu/tomcat/hmtcite/images?request=GetImagePlus&amp;urn=</p>
-            <p class="citekit-additional-source cite-coll" id="svc-graph-coll">http://beta.hpcc.uh.edu/tomcat/hmtcite/collections?request=GetObjectPlus&amp;urn=</p>
-        </div> -->
-        <!--<div id="citekit-additional-sources">
-            <p class="citekit-additional-source cite-cts" id="svc-graph-cts"
-                >http://localhost:8080/citeservlet/texts?request=GetPassagePlus&amp;urn=</p>
-            <p class="citekit-additional-source cite-img" id="svc-graph-img"
-                >http://beta.hpcc.uh.edu/tomcat/hmt/images?request=GetImagePlus&amp;urn=</p>
-            <p class="citekit-additional-source cite-coll" id="svc-graph-coll">http://localhost:8080/citeservlet/collections?request=GetObjectPlus&amp;urn=</p>
-        </div>-->
+      
     </xsl:template>
     
     
