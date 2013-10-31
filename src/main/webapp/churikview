@@ -1,0 +1,77 @@
+import edu.holycross.shot.mep.*
+
+import edu.harvard.chs.cite.CtsUrn
+import edu.harvard.chs.cite.CiteUrn
+
+
+String contentType = "text/xml"
+response.setContentType(contentType)
+response.setHeader( "Access-Control-Allow-Origin", "*")
+
+
+String serverUrl = "@tripleserver@"
+
+boolean done = false
+
+
+String getVisualIndex(CiteUrn pageUrn, MepGraph sparql) {
+    MepPage pg = new MepPage(pageUrn, sparql)
+    String img = pg.getImg()
+
+    StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${img}</urn></request>\n<reply>\n")
+    xml.append("<graph urn='" + img + "'>")
+
+    // show churik zones:
+String seq2 = "<sequence s='" + "churik" + "' v='http://www.homermultitext.org/cite/rdf/illustrates' type='object'>\n"
+xml.append(seq2)
+    for (zone in MepPage.PageZone.TOP..MepPage.PageZone.BOTTOM) {
+        String top
+        BigDecimal topDecimal = pg.pageTop.toBigDecimal()
+        BigDecimal height
+        switch (zone) {
+            case MepPage.PageZone.TOP:
+                top = pg.pageTop
+            height =  pg.churikZones[MepPage.PageZone.TOP] - topDecimal
+            break
+            case MepPage.PageZone.MIDDLE:
+                top = "${pg.churikZones[MepPage.PageZone.TOP]}"
+            height =  pg.churikZones[MepPage.PageZone.MIDDLE] - pg.churikZones[MepPage.PageZone.TOP] 
+            break
+
+            case MepPage.PageZone.BOTTOM:
+                top = "${pg.churikZones[MepPage.PageZone.MIDDLE]}"
+            height = pg.churikZones[MepPage.PageZone.BOTTOM] - pg.churikZones[MepPage.PageZone.MIDDLE]
+            break
+        }
+        String imgRoi = "${img}@0,${top},1.0,${height}"
+        String nodeStr =    "<node type='object' v='http://www.homermultitext.org/cite/rdf/illustrates' s='" + imgRoi + "'><label></label><value>urn:cite:mep:churik.${zone}</value></node>\n"
+        System.err.println nodeStr
+        xml.append(nodeStr)
+}    
+xml.append("</sequence>")
+
+
+    xml.append("</graph>\n")
+    xml.append("</reply>\n</citegraph>")
+                                        
+}
+
+
+CiteUrn pgUrn  = null
+if (request.getParameter("urn")) {
+    try {
+        pgUrn = new CiteUrn( request.getParameter("urn"))
+    } catch (Exception e) {
+        println("Need a valid 'urn' parameter:  got '" +pgUrn + "'.  ${e}")
+        done = true
+    }
+} else  {
+    println("Need a 'urn' parameter for the page to analyze.")
+    done = true
+}
+
+if (!done) {
+    println '<?xml-stylesheet type="text/xsl" href="xslt/index_image.xsl"?>\n'
+    MepGraph graph = new MepGraph(serverUrl)
+    println getVisualIndex(pgUrn, graph)
+}

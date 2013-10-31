@@ -1,10 +1,10 @@
 import edu.holycross.shot.mep.*
+import groovy.xml.MarkupBuilder
 
 import edu.harvard.chs.cite.CtsUrn
 import edu.harvard.chs.cite.CiteUrn
 
-
-String contentType = "text/xml"
+String contentType = "text/html"
 response.setContentType(contentType)
 response.setHeader( "Access-Control-Allow-Origin", "*")
 
@@ -14,17 +14,36 @@ String serverUrl = "@tripleserver@"
 boolean done = false
 
 
-String getVisualIndex(CiteUrn pageUrn, MepGraph sparql) {
-    MepPage pg = new MepPage(pageUrn, sparql)
-    String img = pg.getImg()
+String  getPageSummary(CiteUrn urn, MepGraph graph) {
+    // get label from query...
+    // get basic stats from query...
 
-    StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${img}</urn></request>\n<reply>\n")
-    xml.append("<graph urn='" + img + "'>")
+    StringWriter writer = new StringWriter()
+    MarkupBuilder html = new MarkupBuilder(writer)
+    html.html {
+        head {
+            title("Page ${urn}")
+        }
+        body {
+            h1 ("Page ${urn}")
+            
+            ul {
+                li { 
+                    mkp.yield ("See ")
+                    a(href : "churikview?urn=${urn}", "Churik view")
+                }
+                li {
+                    mkp.yield ("See ")
+                    a(href : "maniaciview?urn=${urn}", "Maniaci view")
+                }
 
-    xml.append("</graph>\n")
-    xml.append("</reply>\n</citegraph>")
-                                        
+            }
+        }
+    }
+    
+    return writer.toString()
 }
+
 
 
 CiteUrn pgUrn  = null
@@ -40,8 +59,8 @@ if (request.getParameter("urn")) {
     done = true
 }
 
+
 if (!done) {
-    println '<?xml-stylesheet type="text/xsl" href="xslt/index_image.xsl"?>\n'
     MepGraph graph = new MepGraph(serverUrl)
-    println getVisualIndex(pgUrn, graph)
+    println getPageSummary(pgUrn, graph)
 }

@@ -29,9 +29,14 @@
 
     <servlet-mapping>
         <servlet-name>GroovyServlet</servlet-name>
-        <url-pattern>/pageview</url-pattern>
+        <url-pattern>/maniaciview</url-pattern>
     </servlet-mapping>
 
+
+    <servlet-mapping>
+        <servlet-name>GroovyServlet</servlet-name>
+        <url-pattern>/churikview</url-pattern>
+    </servlet-mapping>
 
 
     <servlet-mapping>
