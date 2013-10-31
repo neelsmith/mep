@@ -1,3 +1,22 @@
+import edu.holycross.shot.mep.*
+import groovy.xml.MarkupBuilder
+import edu.harvard.chs.cite.CiteUrn
+
+
+String contentType = "text/html"
+response.setContentType(contentType)
+response.setHeader( "Access-Control-Allow-Origin", "*")
+
+
+String serverUrl = "@tripleserver@"
+
+MepGraph graph = new MepGraph(serverUrl)
+MepMS ms = new MepMS(graph)
+
+
+StringWriter writer = new StringWriter()
+MarkupBuilder html = new MarkupBuilder(writer)
+
 
 html.html {
     head {
@@ -18,13 +37,44 @@ html.html {
                 a(href : "queryforms", "forms for querying the service")
                 mkp.yield "."
             }
-	    h2("Links to add")
+
+            h2("Analyze a page")
+            form(action: "vapage") {
+                select(name: "urn") {
+                    ms.pageSequence.each { pg ->
+                        CiteUrn urn = new CiteUrn(pg)
+                        option(value : pg, "${urn.getObjectId()}")
+                    }
+                }
+                input(type: "submit", value: "Analyze page")
+            }
+
+
+            h2 {
+                mkp.yield "Overview by "
+                em("Iliad")
+                mkp.yield(" book")
+            }
+
+            h2("Overview of the manuscript")
+
+
+	    h2("Other links")
 	    ul {
-                li ("More about this implementation.")
-                li ("Article from 'Built-upon' series.")
+
+                li {
+                    a(href : "builtUpon/index.html", "Article from 'Built-upon' series")
+                }
+
+
                 li ("README.")
                 li ("License information.")
+
+                li ("More about this implementation.")
             }
         }
     }
 }
+
+
+println writer.toString()

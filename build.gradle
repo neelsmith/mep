@@ -1,4 +1,25 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import edu.holycross.shot.mdweb.SiteBuilder
+import org.pegdown.PegDownProcessor
+
+buildscript {
+    repositories {
+        mavenCentral()
+	// for mdweb library
+        maven {
+            url "http://beta.hpcc.uh.edu/nexus/content/repositories/releases"
+        }
+	// for pegdown library
+        maven {
+            url "https://repository.jboss.org/nexus/content/repositories/scala-tools-releases"
+        }
+    }
+    dependencies {
+        classpath  group: 'edu.holycross.shot', name : 'mdweb' , version: "0.3.1"
+        classpath group: 'org.pegdown', name : 'pegdown', version: "1.0.1"
+    }
+}
+
 
 apply plugin: 'war'
 apply plugin: 'jetty'
@@ -47,7 +68,6 @@ dependencies {
 }
 
 
-
 httpPort = 8080
 stopPort = 9451
 stopKey = 'foo'
@@ -56,10 +76,27 @@ stopKey = 'foo'
 group = "edu.holycross.shot"
 version = "0.1.0"
 
+
+
+
 task setupCK (type: Copy ) {
     from  zipTree(configurations.ck.files.asList()[0])
     into "${buildDir}/tmp/jettyRunWar/webapp/citekit"
 }
+
+task article(dependsOn: setupCK) {
+    description =  "Use mdweb library to build web site"
+    doLast {
+        File src = new File("builtUpon")
+        if (!buildDir.exists()) {
+            buildDir.mkdir()
+        }
+        File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/builtUpon")
+        SiteBuilder sb = new SiteBuilder(src,out)
+        sb.buildSite()
+    }
+}
+
 
 
 uploadArchives {
@@ -79,15 +116,13 @@ war {
     from ("${buildDir}/tmp/jettyRunWar/webapp/citekit") {
         into("citekit")
     }
-
-
     classpath sourceSets.main.output.classesDir
     classpath configurations.runtime
 }
 
 
-jettyRunWar.dependsOn(setupCK)
+jettyRunWar.dependsOn([article])
 
-war.dependsOn(setupCK)
+war.dependsOn([article])
 
 

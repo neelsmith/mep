@@ -16,4 +16,6 @@ ext {
     junitVersion = "4.8.2"
 
     ckVersion = "0.0.7"
+    
+    mdwebVersion = "0.4.1"
 }
