@@ -17,6 +17,8 @@ boolean done = false
 String  getPageSummary(CiteUrn urn, MepGraph graph) {
     // get label from query...
     // get basic stats from query...
+    MepPage pg = new MepPage(urn,graph)
+    CtsUrn mainScholia = new CtsUrn('urn:cts:greekLit:tlg5026.msA.hmt')
 
     StringWriter writer = new StringWriter()
     MarkupBuilder html = new MarkupBuilder(writer)
@@ -26,6 +28,11 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
         }
         body {
             h1 ("Page ${urn}")
+
+            p("Summary:")
+            p("Tokens: ${pg.numTokens};  in main scholia: ${pg.countTokensForDocument(mainScholia)}")
+            p("Scholia: ${pg.numScholia}; main scholia: ${pg.getScholiaForDocument(mainScholia).size()}")
+            
             
             ul {
                 li { 
