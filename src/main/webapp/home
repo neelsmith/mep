@@ -30,13 +30,25 @@ html.html {
     	}
     	
     	article {
+            h2("About this site")
             p("This site hosts services interpreting the layout of the Venetus A manuscript, using information from the HMT project RDF graph.")
-            p("(NB: As the HMT project's coverage of the Venetus A expands, results of queries to this service will change!)")
+            p("Data set:  definition or link to discussion in article.")
+            p("It also hosts an article by Nikolas Churik and Neel Smith that uses tmaterial from this service.")
+            
+
+            h2("Browse the Venetus A")
+            p { 
+                mkp.yield "Browse "
+                a (href: "browse", "the edited pages") 
+                mkp.yield " of the manuscript."
+            }
+/*
 	    p {
                 mkp.yield "See "
                 a(href : "queryforms", "forms for querying the service")
                 mkp.yield "."
             }
+*/
 
             h2("Analyze a page")
             form(action: "vapage") {
