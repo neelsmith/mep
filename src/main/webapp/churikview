@@ -15,7 +15,9 @@ boolean done = false
 
 
 String getVisualIndex(CiteUrn pageUrn, MepGraph sparql) {
+    CtsUrn mainScholia = new CtsUrn('urn:cts:greekLit:tlg5026.msA.hmt')
     MepPage pg = new MepPage(pageUrn, sparql)
+    MepLayout layout = new MepLayout(pg)
     String img = pg.getImg()
 
     StringBuffer xml = new StringBuffer("<citegraph xmlns='http://chs.harvard.edu/xmlns/citeindex'>\n<request><urn>${img}</urn></request>\n<reply>\n")
@@ -50,6 +52,45 @@ xml.append(seq2)
 }    
 xml.append("</sequence>")
 
+    def scoreMap = layout.score(pg.commentary, layout.rankScholia(pg.getScholiaForDocument(mainScholia), pg.churikZones), layout.computeChurikRankForIliad() )
+    def goodScores = [:]
+    def badScores = [:]
+    scoreMap.keySet().each { scholion ->
+        if (scoreMap[scholion] == true) {
+            goodScores[scholion] = "${img}@${pg.roiForScholion[scholion]}"
+        } else {
+            badScores[scholion] = "${img}@${pg.roiForScholion[scholion]}"
+        }
+    }
+
+    def goodCount = 0
+    goodScores.keySet().each { k ->
+        if (goodCount == 0) {
+            xml.append( "<sequence s='goodscores' v='http://www.homermultitext.org/cite/rdf/illustrates' type='text'>\n")
+            xml.append("<label>Successful predictions</label>\n")
+            xml.append("<value>\n")
+        }
+        goodCount++;
+        String n = "<node type='text' v='http://www.homermultitext.org/cite/rdf/illustrates' s='" + goodScores[k] + "'><label>${k}</label><value>${k}</value></node>\n"
+        xml.append(n)
+    }
+    xml.append("</value></sequence>\n")
+
+
+
+
+    def badCount = 0
+    badScores.keySet().each { k ->
+        if (badCount == 0) {
+            xml.append( "<sequence s='badscores' v='http://www.homermultitext.org/cite/rdf/illustrates' type='text'>\n")
+            xml.append("<label>Unsuccessful predictions</label>\n")
+            xml.append("<value>\n")
+        }
+        badCount++;
+        String n = "<node type='text' v='http://www.homermultitext.org/cite/rdf/illustrates' s='" + badScores[k] + "'><label>${k}</label><value>${k}</value></node>\n"
+        xml.append(n)
+    }
+    xml.append("</value></sequence>\n")
 
     xml.append("</graph>\n")
     xml.append("</reply>\n</citegraph>")

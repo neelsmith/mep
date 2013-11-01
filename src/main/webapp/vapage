@@ -15,10 +15,13 @@ boolean done = false
 
 
 String  getPageSummary(CiteUrn urn, MepGraph graph) {
+    CtsUrn mainScholia = new CtsUrn('urn:cts:greekLit:tlg5026.msA.hmt')
+
     // get label from query...
     // get basic stats from query...
     MepPage pg = new MepPage(urn,graph)
-    CtsUrn mainScholia = new CtsUrn('urn:cts:greekLit:tlg5026.msA.hmt')
+    MepLayout ml = new MepLayout(pg)
+
 
     StringWriter writer = new StringWriter()
     MarkupBuilder html = new MarkupBuilder(writer)
@@ -33,7 +36,25 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
             p("Tokens: ${pg.numTokens};  in main scholia: ${pg.countTokensForDocument(mainScholia)}")
             p("Scholia: ${pg.numScholia}; main scholia: ${pg.getScholiaForDocument(mainScholia).size()}")
             
-            
+            def cScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.churikZones), ml.computeChurikRankForIliad() )
+        def cright = 0
+        cScore.keySet().each { k -> 
+            if (cScore[k] == true ) {
+                cright++
+            }
+        }
+        p( "churik scores: ${cright}/" + cScore.size() )
+
+        def mScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.maniaciZones), ml.computeManiaciRankForIliad() )
+        def mright = 0
+        mScore.keySet().each { k -> 
+            if (mScore[k] == true ) {
+                mright++
+            }
+        }
+        p( "maniaci scores: ${mright}/" + mScore.size() )
+
+
             ul {
                 li { 
                     mkp.yield ("See ")
