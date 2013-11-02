@@ -1,7 +1,8 @@
 
-- Introduction
-- Revising Maniaci's hypothesis
-    - a statistical analysis of the data
-- Building upon the Homer Multitext project
-- Developing a Mise-en-Page machine
+# Design and layout of the richest manuscript of the *Iliad* #
 
+Placeholder for content, formatted in markdown, of Churik-Smith analysis of page layout of the Venetus A manuscript.
+
+- [prospectus][abstract] for Built Upon series
+
+[abstract]: prospectus.html

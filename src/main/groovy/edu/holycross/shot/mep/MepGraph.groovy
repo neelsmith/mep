@@ -44,6 +44,23 @@ class MepGraph {
         return pageList
     }
 
+
+    ArrayList getEditedThumbs() {
+        String q = this.qg.buildEditedMS()
+        String scholiaReply = getSparqlReply("application/json",q)
+        def imgList = []
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+        parsedReply.results.bindings.each { b ->
+            def pair = []
+            pair[0] = b.pg.value
+            pair[1] = b.img.value
+            imgList.add(pair)
+        }
+        return imgList
+    }
+
+
     ArrayList getPrevNextPage(String urnString) {
         try {
             CiteUrn urn = new CiteUrn(urnString)

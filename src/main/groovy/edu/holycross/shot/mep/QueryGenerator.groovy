@@ -30,14 +30,15 @@ FILTER (str(?pg) = "${pageUrn}")
     */
     String buildEditedMS() {
         return """
-SELECT ?pg ?seq (count(?schol) AS ?scholia) WHERE {
+SELECT ?pg ?seq (count(?schol) AS ?scholia) ?img WHERE {
 ?pg <http://www.homermultitext.org/cite/rdf/belongsTo> ?ms .
 ?pg <http://purl.org/ontology/olo/core#item>  ?seq .
 ?pg <http://www.homermultitext.org/cite/rdf/hasOnIt> ?schol .
+?pg  <http://www.homermultitext.org/hmt/rdf/hasDefaultImage> ?img .
 FILTER (str(?ms) = "urn:cite:hmt:msA")
 FILTER (regex(str(?schol), "urn:cts:greekLit:tlg5026"))
 }
-GROUP BY ?pg ?seq
+GROUP BY ?pg ?seq ?img
 ORDER BY ?seq
 """
     }

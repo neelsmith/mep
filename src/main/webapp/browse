@@ -1,0 +1,88 @@
+/**
+*
+* Optional parameters:
+* - limit:  page size (ie, number of objects to retrieve).
+* - offset: where to begin this page in the sequence of the collection.
+*
+*/
+
+import edu.holycross.shot.mep.*
+import groovy.xml.MarkupBuilder
+import edu.harvard.chs.cite.CiteUrn
+
+
+String contentType = "text/html"
+response.setContentType(contentType)
+response.setHeader( "Access-Control-Allow-Origin", "*")
+
+
+String serverUrl = "@tripleserver@"
+
+String width = "@imgw@"
+
+String limit ="9"
+if ((params.limit != null) && (params.limit != ""))  {
+    limit = params.limit
+}
+Integer limitInt = limit as Integer
+
+String offset = "0"
+if ((params.offset != null) && (params.offset != ""))  {
+    offset = params.offset
+}
+Integer offInt = offset as Integer
+
+
+Integer nextOff = offInt + limitInt
+// check if > size of collection ...
+Integer prevOff = offInt - limitInt
+if (prevOff < 0) {
+    prevOff = 0
+}
+Integer block = 3
+
+
+html.html {
+    head {
+        title("Edited pages of the Venetus A manuscript ")
+        link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')	
+    }
+    body {
+        header {
+            nav (role: 'navigation') {
+                mkp.yield "MEP: " 
+                a (href : "home", "home")
+            }
+            h1 ("Edited pages of the Venetus A manuscript")
+        }
+        body {
+            /* Add checks on max/min values:  don't scroll off the edge! */
+            p {
+                String prev = "browse?limit=${limit}&offset=${prevOff}"
+                a(href : prev, "back") 
+                mkp.yield (" | ")
+                String nxt = "browse?limit=${limit}&offset=${nextOff}"
+                a(href : nxt, "forward") 
+
+            }
+/*
+            Integer total = parsedColls.results.bindings.size()
+            def blockCount = (total / block ) as Integer            
+            for (i in 0..(blockCount - 1)) {
+                    for (j in 0..(block - 1)) {
+                        def index  = i * block + j
+                        def obj = parsedColls.results.bindings[index]
+                        div(class : "thumbnail") {
+                            a (href : "${graph}?&urn=${obj.obj.value}") {
+                                img (src : "${imgsvc}?request=GetBinaryImage&w=${imgwidth}&urn=${obj.img.value}")
+                            }
+                            p(class : "caption", "${obj.objlabel.value}")
+                        }
+                }
+            }
+
+        }*/
+
+        }
+    }
+}
