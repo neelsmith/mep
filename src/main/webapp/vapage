@@ -37,7 +37,20 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                     a (href : "home", "home")
                 }
                 h1 ("Page ${urn}")
-                p("prev | next")
+                p {
+                    if (pg.getPrevPage() != "") {
+                        a(href : "vapage?urn=${pg.getPrevPage()}", "previous")
+                    } else {
+                        mkp.yield ("previous")
+                    }
+                    mkp.yield (" | ")
+                    if (pg.getNextPage() != "") {
+                        a(href : "vapage?urn=${pg.getNextPage()}", "next")
+                    } else {
+                        mkp.yield ("next")
+                    }
+                }
+
             }
             article {
                 div ('id' : "leftDiv") {
@@ -64,7 +77,19 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                     }
 
                     h2("Density of text and commentary")
-                    p("Number of Iliad lines: ${pg.getIliadLines().size()}")
+                    p { 
+                        strong("No. of Iliad lines ")
+                        mkp.yield "${pg.getIliadLines().size()}"
+                    }
+
+                    p {
+                        CtsUrn range = new CtsUrn(pg.getIliadRange())
+                        em("Iliad ")
+                        a (href: "@texts@?request=GetPassagePlus&urn=${range}") {
+                            mkp.yield " ${range.getPassageComponent()}"
+                        }
+                        
+                    }
                     table {
 
                         thead {
@@ -109,7 +134,7 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                             a(href : "churikview?urn=${urn}", "layout of Churik analysis")
                         }
                         li {
-                            mkp.yield ("See ")
+                            mkp.yield ("View ")
                             a(href : "maniaciview?urn=${urn}", "layout of Maniaci analysis")
                         }
                     }

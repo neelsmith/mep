@@ -114,6 +114,13 @@ class MepPage {
         calculateChurikZones()
     }
 
+    String getIliadRange() {
+        StringBuffer range = new StringBuffer(iliadLines[0])
+        CtsUrn lastUrn = new CtsUrn(iliadLines[iliadLines.size() - 1])
+        range.append("-${lastUrn.getPassageComponent()}")
+        return range.toString()
+    }
+
 
     /** For each scholion on this page, extracts RoI portion of
     * mapped image, and stores that in the roiForScholion map.
