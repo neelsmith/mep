@@ -9,7 +9,7 @@
     
     
     <!-- Linking URLs for nav section -->
-    <xsl:variable name="homeUrl">@homeUrl@</xsl:variable>
+    <xsl:variable name="homeUrl">home</xsl:variable>
     <xsl:variable name="formsUrl">@queryforms@</xsl:variable>
     
     <!-- Variables for CSS Classes and HTML IDs -->
@@ -89,18 +89,18 @@
                     <xsl:call-template name="header"/>
                 </header>
                 <nav>
-                    <p>
+                    <p>MEP:
                         <xsl:element name="a">
                             <xsl:attribute name="href"><xsl:value-of select="$homeUrl"/></xsl:attribute>
                             Home
                         </xsl:element>
-                        
+                        <!--
                         :
                         <xsl:element name="a">
                             <xsl:attribute name="href"><xsl:value-of select="$formsUrl"/></xsl:attribute>
                             Look up material by URN
                         </xsl:element>
-                        
+                        -->
                         
                     </p>
                     
