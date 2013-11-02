@@ -14,6 +14,17 @@ class QueryGenerator {
     QueryGenerator() {
     }
 
+    String pagePrevNext(String pageUrn) {
+return """
+SELECT  ?prev ?nxt WHERE  {
+?pg <http://purl.org/ontology/olo/core#item>  ?seq .
+?pg <http://purl.org/ontology/olo/core#next>  ?nxt .
+?pg <http://purl.org/ontology/olo/core#previous>  ?prev .
+FILTER (str(?pg) = "${pageUrn}")
+}
+"""
+    }
+
     /** Constructs a query to find in sequence all folio pages
     * with edited scholia.
     */

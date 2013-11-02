@@ -44,6 +44,30 @@ class MepGraph {
         return pageList
     }
 
+    ArrayList getPrevNextPage(String urnString) {
+        try {
+            CiteUrn urn = new CiteUrn(urnString)
+            return getPrevNextPage(urn)
+        } catch (Exception e) {
+            throw e
+        }
+    }
+
+    ArrayList getPrevNextPage(CiteUrn pg) {
+        // two-element array
+        def pnList = ["",""]
+        String q = this.qg.pagePrevNext("${pg}")
+        String scholiaReply = getSparqlReply("application/json",q)
+
+        def slurper = new groovy.json.JsonSlurper()
+        def parsedReply = slurper.parseText(scholiaReply)
+        parsedReply.results.bindings.each { b ->
+            pnList[0] = b.prev.value
+            pnList[1] = b.nxt.value
+        }
+        return pnList
+    }
+
     /** Gets region of interest for all scholia on a given page.
     * @param pageUrnString String value of page URN.
     * @returns A map keyed by scholion's CITE URN, mapped to

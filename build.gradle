@@ -56,9 +56,12 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: commonsioVersion
     compile group: 'log4j', name: 'log4j', version: log4jVersion, ext: 'jar'
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
-    groovy  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
-    groovy group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
-    groovy group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
+//    groovy  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+compile  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+//    groovy group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
+compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
+//    groovy group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
+compile group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
 
     runtime group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
 

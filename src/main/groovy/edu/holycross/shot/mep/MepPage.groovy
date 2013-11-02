@@ -24,6 +24,10 @@ class MepPage {
     /** URN of the page to analyze. */
     CiteUrn urn
 
+    String prevPage
+    String nextPage
+
+
 
     /** Strinv value of URN of default image */
     String img
@@ -101,7 +105,7 @@ class MepPage {
         this.iliadRoI = mepg.getIliadBlock(this.urn)
         // add default image
         this.img = mepg.getDefaultImage(this.urn)
-
+        findPrevNext()
         getRoIsForScholia()
         // set pageTop and pageBottom values, and
         // caclulate vertical zones:
@@ -204,6 +208,12 @@ class MepPage {
         return scholiaMap[urnString]
     }
 
+    void findPrevNext() {
+        ArrayList pnPair = mepg.getPrevNextPage("${this.urn}")
+        this.prevPage =  pnPair[0]
+        this.nextPage = pnPair[1]
+    }
+
     /** Initializes pageTop and pageBottom members.
     */
     void calculatePageDimm() {
@@ -249,5 +259,7 @@ class MepPage {
         return this.scholiaMap[docUrnString].size()
     }
 
+
+    
 
 }

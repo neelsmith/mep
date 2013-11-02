@@ -39,8 +39,6 @@ html {
 font-size: 11pt;
 }
 
-// NS: Moved these to mep.ccs
-/*
 #leftDiv, #rightDiv {
 padding-left: 5px;
 }
@@ -53,7 +51,7 @@ width: 50%;
 float: right;
 width: 45%;
 }
-*/
+
 header, footer {
 		padding: 5px;
 		background-color: #f7f7f7;
