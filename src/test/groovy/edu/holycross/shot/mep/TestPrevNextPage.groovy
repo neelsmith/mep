@@ -17,10 +17,15 @@ class TestPrevNextPage extends GroovyTestCase {
 
     void testPN() {
         MepPage pg = new MepPage(twelverecto, graph)
-
         assert pg.getPrevPage() == "urn:cite:hmt:msA.11v"
         assert pg.getNextPage() == "urn:cite:hmt:msA.12v"
+    }
 
+
+    void testBoundaries() {
+        CiteUrn firstPage = new CiteUrn("urn:cite:hmt:msA.1r")
+        MepPage pg = new MepPage(firstPage, graph)
+        assert pg.getPrevPage()  == ""
     }
 
 }
