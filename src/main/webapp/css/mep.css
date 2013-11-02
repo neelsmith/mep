@@ -1,0 +1,21 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic);
+
+body {
+    font-family: Lato, sans-serif;
+}
+
+
+#leftDiv, #rightDiv {
+padding-left: 5px;
+}
+
+#leftDiv {
+width: 45%;
+float : left;
+}
+
+#rightDiv {
+float: right;
+width: 45%;
+}
+

@@ -21,6 +21,7 @@ MarkupBuilder html = new MarkupBuilder(writer)
 html.html {
     head {
         title("Mise en page")
+	link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')
     }
     
     body {

@@ -28,43 +28,92 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
     html.html {
         head {
             title("Page ${urn}")
+            link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')	
         }
         body {
-            h1 ("Page ${urn}")
-
-            p("Summary:")
-            p("Tokens: ${pg.numTokens};  in main scholia: ${pg.countTokensForDocument(mainScholia)}")
-            p("Scholia: ${pg.numScholia}; main scholia: ${pg.getScholiaForDocument(mainScholia).size()}")
-            
-            def cScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.churikZones), ml.computeChurikRankForIliad() )
-        def cright = 0
-        cScore.keySet().each { k -> 
-            if (cScore[k] == true ) {
-                cright++
-            }
-        }
-        p( "churik scores: ${cright}/" + cScore.size() )
-
-        def mScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.maniaciZones), ml.computeManiaciRankForIliad() )
-        def mright = 0
-        mScore.keySet().each { k -> 
-            if (mScore[k] == true ) {
-                mright++
-            }
-        }
-        p( "maniaci scores: ${mright}/" + mScore.size() )
-
-
-            ul {
-                li { 
-                    mkp.yield ("See ")
-                    a(href : "churikview?urn=${urn}", "Churik view")
+            header {
+                nav (role: 'navigation') {
+                    mkp.yield "MEP: " 
+                    a (href : "home", "home")
                 }
-                li {
-                    mkp.yield ("See ")
-                    a(href : "maniaciview?urn=${urn}", "Maniaci view")
+                h1 ("Page ${urn}")
+                p("prev | next")
+            }
+            article {
+                div ('id' : "leftDiv") {
+                    a (href : "@images@request=GetIIPMooViewer&urn=${pg.getImg()}") {
+                        img(src : "@images@?request=GetBinaryImage&urn=${pg.getImg()}&w=@imgw@")
+                    }
                 }
+                div ('id' : "rightDiv") {
+                    // compute density data:
+                    def cScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.churikZones), ml.computeChurikRankForIliad() )
+                    def cright = 0
+                    cScore.keySet().each { k -> 
+                        if (cScore[k] == true ) {
+                            cright++
+                        }
+                    }
+                
+                    def mScore = ml.score(pg.commentary, ml.rankScholia(pg.getScholiaForDocument(mainScholia), pg.maniaciZones), ml.computeManiaciRankForIliad() )
+                    def mright = 0
+                    mScore.keySet().each { k -> 
+                        if (mScore[k] == true ) {
+                            mright++
+                        }
+                    }
 
+                    h2("Density of text and commentary")
+                    p("Number of Iliad lines: ${pg.getIliadLines().size()}")
+                    table {
+
+                        thead {
+                            tr {
+                                th()
+                                th("All")
+                                th("Main scholia")
+                            }
+                        }
+                        tbody {
+                            tr {
+                                th ("No. of scholia")
+                                td ("${pg.numScholia}")
+                                td("${pg.getScholiaForDocument(mainScholia).size()}")
+                            }
+                            tr {
+                                th ("No. of tokens ('words')")
+                                td ("${pg.numTokens}")
+                                td ("${pg.countTokensForDocument(mainScholia)}")
+                            }
+                        }
+                        
+                    }
+
+                    h2("Analysis of layout of main scholia")
+                    table {
+                        thead {
+                            th()
+                            th("Maniaci algorithm")
+                            th("Churik algorithm")
+                        }
+                        tbody {
+                            th("correct/total")
+                            td( "${mright}/" + mScore.size() )
+                            td( "${cright}/" + cScore.size() )
+                        }
+                    }
+
+                    ul {
+                        li { 
+                            mkp.yield ("View ")
+                            a(href : "churikview?urn=${urn}", "layout of Churik analysis")
+                        }
+                        li {
+                            mkp.yield ("See ")
+                            a(href : "maniaciview?urn=${urn}", "layout of Maniaci analysis")
+                        }
+                    }
+                }
             }
         }
     }
