@@ -4,6 +4,14 @@
 
 [git]: https://github.com/neelsmith/mep
 
+## About ##
+
+"This site hosts services interpreting the layout of the Venetus A manuscript, using information from the HMT project RDF graph
+
+## Data set ##
+
+
+
 
 ## Data model ##
 

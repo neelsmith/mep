@@ -27,64 +27,53 @@ html.html {
     body {
     
     	header {
-            h1("Mise en page: automated layout analysis")
+            h1("Mise en page: automated analysis of the layout of the Venetus A manuscript")
     	}
     	
     	article {
             h2("About this site")
-            p("This site hosts services interpreting the layout of the Venetus A manuscript, using information from the HMT project RDF graph.")
-            p("Data set:  definition or link to discussion in article.")
-            p("It also hosts an article by Nikolas Churik and Neel Smith that uses tmaterial from this service.")
-            
-
-            h2("Browse the Venetus A")
-            p { 
-                mkp.yield "Browse "
-                a (href: "browse", "the edited pages") 
-                mkp.yield " of the manuscript."
-            }
-/*
-	    p {
-                mkp.yield "See "
-                a(href : "queryforms", "forms for querying the service")
-                mkp.yield "."
-            }
-*/
-
-            h2("Analyze a page")
-            form(action: "vapage") {
-                select(name: "urn") {
-                    ms.pageSequence.each { pg ->
-                        CiteUrn urn = new CiteUrn(pg)
-                        option(value : pg, "${urn.getObjectId()}")
-                    }
+            ul {
+                li("What's here?")
+                li("The data set")
+                li {
+                    mkp.yield "Analysis by "
+                    a(href : "builtUpon/index.html", "Churik and Smith")
                 }
-                input(type: "submit", value: "Analyze page")
+                li ("Licenses")
             }
 
+            h2("Automated analyses")
+            h3("By single page")
+            ul {
+                li {
+                    mkp.yield "Select from a visual browser of "
+                    a (href: "browse", "the edited pages") 
+                    mkp.yield " of the Venetus A manuscript."
+                }
 
-            h2 {
-                mkp.yield "Overview by "
-                em("Iliad")
-                mkp.yield(" book")
-            }
-
-            h2("Overview of the manuscript")
-
-
-	    h2("Other links")
-	    ul {
 
                 li {
-                    a(href : "builtUpon/index.html", "Article from 'Built-upon' series")
+                    mkp.yield "Select a specific page by folio/side reference ('r' = 'recto', 'v' = 'verso')"
+                    form(action: "vapage") {
+                        select(name: "urn") {
+                            ms.pageSequence.each { pg ->
+                                CiteUrn urn = new CiteUrn(pg)
+                                option(value : pg, "${urn.getObjectId()}")
+                            }
+                        }
+                        input(type: "submit", value: "Analyze page")
+                    }
                 }
-
-
-                li ("README.")
-                li ("License information.")
-
-                li ("More about this implementation.")
             }
+
+
+            h3 {
+                mkp.yield "By book of the "
+                em("Iliad")
+            }
+
+            h3("Summary analysis of the manuscript")
+
         }
     }
 }
