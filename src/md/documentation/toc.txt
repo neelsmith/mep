@@ -1,4 +1,5 @@
 index.md=Mise en page: documentation
 about.md=What's here
+cloning.md=Replicating Mise en Page
 dataset.md=Mise en page data set
 licenses.md=Copyright and licenses

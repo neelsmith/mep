@@ -10,7 +10,7 @@
 ## Replicable scholarship ##
 
 
-- cloning Mise en Page
+- [cloning Mise en Page](cloning.html)
 
 
 [git]: https://github.com/neelsmith/mep
