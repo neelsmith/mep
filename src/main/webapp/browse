@@ -45,62 +45,45 @@ if (prevOff < 0) {
 }
 Integer block = 3
 
+
+
+
 html.html {
     head {
         title(" Venetus A manuscript: edited pages with scholia")
         link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')	
     }
-    body {
-        header {
-            nav (role: 'navigation') {
-                mkp.yield "MEP: " 
-                a (href : "home", "home")
-                mkp.yield " | "
-                a (href : "documentation/index.html", "documentation")
-            }
-            h1 ("Edited pages of the Venetus A manuscript")
+    header {
+        nav (role: 'navigation') {
+            mkp.yield "MEP: " 
+            a (href : "home", "home")
+            mkp.yield " | "
+            a (href : "documentation/index.html", "documentation")
         }
-        body {
-            // add cheks on max and min vals
-            p {
-                String prev = "browse?limit=${limit}&offset=${prevOff}"
-                a(href : prev, "back") 
-                mkp.yield (" | ")
-                String nxt = "browse?limit=${limit}&offset=${nextOff}"
-                a(href : nxt, "forward") 
-            }
+        h1 ("Edited pages of the Venetus A manuscript")
+    }
 
-            def thumbsList = graph.getEditedThumbs()
-            for (i in offInt .. nextOff) {
-                def thumb = thumbsList[i][1]
-                CiteUrn urn = new CiteUrn(thumbsList[i][0])
-                div(class : "thumbnail") {
+    body {
+        // add cheks on max and min vals
+        p {
+            String prev = "browse?limit=${limit}&offset=${prevOff}"
+            a(href : prev, "back") 
+            mkp.yield (" | ")
+            String nxt = "browse?limit=${limit}&offset=${nextOff}"
+            a(href : nxt, "forward") 
+        }
 
-                    a (href : "vapage?&urn=${urn.toString()}") {
-                        img (src : "${images}?request=GetBinaryImage&w=${width}&urn=${thumb}")
-                    }
-                    p(class : "caption", "page ${urn.getObjectId()}")
+        def thumbsList = graph.getEditedThumbs()
+        for (i in offInt .. nextOff) {
+            def thumb = thumbsList[i][1]
+            CiteUrn urn = new CiteUrn(thumbsList[i][0])
+            div(class : "thumbnail") {
+
+                a (href : "vapage?&urn=${urn.toString()}") {
+                    img (src : "${images}?request=GetBinaryImage&w=${width}&urn=${thumb}")
                 }
+                p(class : "caption", "page ${urn.getObjectId()}")
             }
-            
-/*            Integer total = thumbsList.size()
-            def blockCount = (total.div( block) ) as Integer            
-*/
-/*
-            for (i in 0..(blockCount - 1)) {
-                for (j in 0..(block - 1)) {
-                    def index  = i * block + j
-                    def thumb = thumbsList[index][1]
-                    div(class : "thumbnail") {
-
-                        a (href : "${graph}?&urn=${obj.obj.value}") {
-                            img (src : "${imgsvc}?request=GetBinaryImage&w=${imgwidth}&urn=${obj.img.value}")
-                        }
-                        p(class : "caption", "${thumbsList[index][0]}")
-                    }
-                }
-            }
-*/
         }
     }
 }

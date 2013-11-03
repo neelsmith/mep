@@ -15,7 +15,7 @@ ext {
     thumbw = "150"
 
     // HTML content to use as sitewide page footer
-    htmlfooter = "<p class='warning'>Mise en page: <strong>incomplete version</strong> for testing individual page analyses.</p><p>(See <a href='http://github.com/neelsmith/mep/issues?state=open'>list of known issues</a>.)"
+    htmlfooter = "<p class='warning'>Mise en page: <strong>incomplete version</strong> for testing individual page analyses. (Known issues are <a href='http://github.com/neelsmith/mep/issues?state=open'>tracked on github</a>.)</p>"
 
 
     // reserved property name, not currently used
