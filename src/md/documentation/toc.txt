@@ -1,2 +1,4 @@
 index.md=Mise en page: documentation
+about.md=What's here
+dataset=Mise en page data set
 licenses.md=Copyright and licenses

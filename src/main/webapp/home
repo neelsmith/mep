@@ -33,13 +33,19 @@ html.html {
     	article {
             h2("About this site")
             ul {
-                li("What's here?")
-                li("The data set")
+                li {
+                    a(href : "documentation/about.html","What's here?")
+                }
+                li {
+                    a(href : "documentation/dataset.html", "The data set")
+                }
                 li {
                     mkp.yield "Analysis by "
                     a(href : "builtUpon/index.html", "Churik and Smith")
                 }
-                li ("Licenses")
+                li {
+                    a (href : "documentation/licenses.html", "Licenses")
+                }
             }
 
             h2("Automated analyses")
