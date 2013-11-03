@@ -1,0 +1,2 @@
+index.md=Mise en page: documentation
+licenses.md=Copyright and licenses
