@@ -56,12 +56,11 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: commonsioVersion
     compile group: 'log4j', name: 'log4j', version: log4jVersion, ext: 'jar'
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
-//    groovy  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
-compile  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
-//    groovy group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
-compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
-//    groovy group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
-compile group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
+
+    compile  group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+    compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
+
+    compile group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
 
     runtime group: 'edu.harvard.chs', name : 'cite' , version: citeVersion
 
@@ -80,12 +79,11 @@ group = "edu.holycross.shot"
 version = "0.1.0"
 
 
-
-
 task setupCK (type: Copy ) {
     from  zipTree(configurations.ck.files.asList()[0])
     into "${buildDir}/tmp/jettyRunWar/webapp/citekit"
 }
+
 
 task article(dependsOn: setupCK) {
     description =  "Use mdweb library to build web site"
@@ -110,6 +108,19 @@ uploadArchives {
     }
 }
 
+task docs(dependsOn: article) {
+    description =  "Use mdweb library to build dcoumentation section of web site"
+    doLast {
+        File src = new File("src/md")
+        if (!buildDir.exists()) {
+            buildDir.mkdir()
+        }
+        File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/")
+        SiteBuilder sb = new SiteBuilder(src,out)
+        sb.buildSite()
+    }
+}
+
 
 war {
 //    filter(ReplaceTokens, tokens: [homeUrl: homeUrl, sparqls: sparqls, iipsrv : iipsrv, demoImage : demoImage, demoObject : demoObject, demoText : demoText, detailWidth: detailWidth, 
@@ -125,8 +136,8 @@ war {
 }
 
 
-jettyRunWar.dependsOn([article])
+jettyRunWar.dependsOn([docs])
 
-war.dependsOn([article])
+war.dependsOn([docs])
 
 
