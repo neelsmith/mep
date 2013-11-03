@@ -19,3 +19,8 @@ float: right;
 width: 45%;
 }
 
+
+div.thumbmail {
+    float : left;
+}
+

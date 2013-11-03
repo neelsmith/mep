@@ -21,7 +21,8 @@ MepGraph graph = new MepGraph(serverUrl)
 
 
 String images = "@images@"
-String width = "@imgw@"
+
+String width = "@thumbw@"
 
 String limit ="9"
 if ((params.limit != null) && (params.limit != ""))  {
