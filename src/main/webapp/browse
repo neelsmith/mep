@@ -54,6 +54,8 @@ html.html {
             nav (role: 'navigation') {
                 mkp.yield "MEP: " 
                 a (href : "home", "home")
+                mkp.yield " | "
+                a (href : "documentation/index.html", "documentation")
             }
             h1 ("Edited pages of the Venetus A manuscript")
         }

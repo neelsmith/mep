@@ -27,6 +27,9 @@ html.html {
     body {
     
     	header {
+            nav (role: 'navigation') {
+                    a (href : "documentation/index.html", "documentation")
+            }
             h1("Mise en page: automated analysis of the layout of the Venetus A manuscript")
     	}
     	
@@ -69,6 +72,11 @@ html.html {
                         }
                         input(type: "submit", value: "Analyze page")
                     }
+                }
+                li {
+                    mkp.yield "Select a specific page by reference to "
+                    em("Iliad")
+                    mkp.yield " line."
                 }
             }
 

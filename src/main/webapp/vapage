@@ -35,6 +35,8 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                 nav (role: 'navigation') {
                     mkp.yield "MEP: " 
                     a (href : "home", "home")
+		    mkp.yield " | "
+                    a (href : "documentation/index.html", "documentation")
                 }
                 h1 ("Page ${urn}")
                 p {
