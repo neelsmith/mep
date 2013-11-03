@@ -28,6 +28,7 @@ html.html {
     
     	header {
             nav (role: 'navigation') {
+                mkp.yield "MEP "
                     a (href : "documentation/index.html", "documentation")
             }
             h1("Mise en page: automated analysis of the layout of the Venetus A manuscript")
