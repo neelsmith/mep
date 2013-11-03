@@ -1,10 +1,23 @@
 
 ext {
+    // SPARQL endpoint with HMT project data:
     //tripleserver = "http://localhost:3030/ds/"
     tripleserver = "http://beta.hpcc.uh.edu:3030/ds/"
+
+
+    //  Base URL of MEP installation
+    rooturl = "http://localhost:8080/mep"
+    //rooturl = "http://beta.hpcc.uh.edu/tomcat/mep"
 
     // Default width for images in page overview display,
     // and in thumbnail display:
     imgw = "400"
     thumbw = "150"
+
+    // HTML content to use as sitewide page footer
+    htmlfooter = "<p class='warning'>Mise en page: <strong>incomplete version</strong> for testing individual page analyses.</p><p>(See <a href='http://github.com/neelsmith/mep/issues?state=open'>list of known issues</a>.)"
+
+
+    // reserved property name, not currently used
+    htmlheader = ""
 }

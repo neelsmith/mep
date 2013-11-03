@@ -10,7 +10,8 @@
     
     <!-- Linking URLs for nav section -->
     <xsl:variable name="homeUrl">home</xsl:variable>
-    <xsl:variable name="formsUrl">@queryforms@</xsl:variable>
+    <!--
+    <xsl:variable name="formsUrl">@queryforms@</xsl:variable> -->
     
     <!-- Variables for CSS Classes and HTML IDs -->
     <xsl:variable name="canvasId">canvas</xsl:variable>

@@ -90,8 +90,13 @@ html.html {
             h3("Summary analysis of the manuscript")
 
         }
+        footer {
+            mkp.yield "INSERTFOOTER"
+        }
     }
 }
 
+String base = writer.toString()
+println base.replaceAll('INSERTFOOTER',"""@htmlfooter@""")
 
-println writer.toString()
+

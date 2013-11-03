@@ -27,7 +27,7 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
     MarkupBuilder html = new MarkupBuilder(writer)
     html.html {
         head {
-            title("Page ${urn}")
+            title("Venetus A, page ${urn.getObjectId()}")
             link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')	
         }
         body {
@@ -38,7 +38,7 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
 		    mkp.yield " | "
                     a (href : "documentation/index.html", "documentation")
                 }
-                h1 ("Page ${urn}")
+                h1 ("Venetus A, page ${urn.getObjectId()}")
                 p {
                     if (pg.getPrevPage() != "") {
                         a(href : "vapage?urn=${pg.getPrevPage()}", "previous")
@@ -142,10 +142,14 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                     }
                 }
             }
+            footer    {
+                mkp.yield "INSERTFOOTER"
+            }
         }
     }
     
-    return writer.toString()
+    String base = writer.toString()
+    return base.replaceAll('INSERTFOOTER',"""@htmlfooter@""")
 }
 
 
