@@ -99,7 +99,8 @@ task article(dependsOn: setupCK) {
         if (!buildDir.exists()) {
             buildDir.mkdir()
         }
-        File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/builtUpon")
+        //File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/builtUpon")
+        File out = new File("${buildDir.path}/builtUpon")
         SiteBuilder sb = new SiteBuilder(src,out)
         sb.buildSite()
     }
@@ -138,6 +139,13 @@ war {
     from ("${buildDir}/tmp/jettyRunWar/webapp/citekit") {
         into("citekit")
     }
+    from ("imgs") {
+        into "imgs"
+    }
+    from ("${buildDir}/builtUpon") {
+        into("builtUpon")
+    }
+
     classpath sourceSets.main.output.classesDir
     classpath configurations.runtime
 }
