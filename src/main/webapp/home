@@ -56,8 +56,8 @@ html.html {
             h3("By single page")
             ul {
                 li {
-                    mkp.yield "Select from a visual browser of "
-                    a (href: "browse", "the edited pages") 
+                    mkp.yield "Select from a visual "
+                    a (href: "browse", "browser of the edited pages") 
                     mkp.yield " of the Venetus A manuscript."
                 }
 
