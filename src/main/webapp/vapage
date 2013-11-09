@@ -35,10 +35,12 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                 nav (role: 'navigation') {
                     mkp.yield "MEP: " 
                     a (href : "home", "home")
-		    mkp.yield " | "
+                    mkp.yield " | "
                     a (href : "documentation/index.html", "documentation")
                 }
                 h1 ("Venetus A, page ${urn.getObjectId()}")
+            }
+            article {
                 p {
                     if (pg.getPrevPage() != "") {
                         a(href : "vapage?urn=${pg.getPrevPage()}", "previous")
@@ -53,8 +55,6 @@ String  getPageSummary(CiteUrn urn, MepGraph graph) {
                     }
                 }
 
-            }
-            article {
                 div ('id' : "leftDiv") {
                     a (href : "@images@request=GetIIPMooViewer&urn=${pg.getImg()}") {
                         img(src : "@images@?request=GetBinaryImage&urn=${pg.getImg()}&w=@imgw@")
