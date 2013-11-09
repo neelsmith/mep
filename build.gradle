@@ -81,14 +81,13 @@ version = "0.1.0"
 
 task imgs (type: Copy ) {
     from  "imgs"
-    into "${buildDir}/tmp/jettyRunWar/webapp/imgs"
+    into "${buildDir}/imgs"
 }
-
 
 
 task setupCK (type: Copy ) {
     from  zipTree(configurations.ck.files.asList()[0])
-    into "${buildDir}/tmp/jettyRunWar/webapp/citekit"
+    into "${buildDir}/citekit"
 }
 
 
@@ -99,7 +98,6 @@ task article(dependsOn: setupCK) {
         if (!buildDir.exists()) {
             buildDir.mkdir()
         }
-        //File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/builtUpon")
         File out = new File("${buildDir.path}/builtUpon")
         SiteBuilder sb = new SiteBuilder(src,out)
         sb.buildSite()
@@ -123,7 +121,7 @@ task docs(dependsOn: article) {
         if (!buildDir.exists()) {
             buildDir.mkdir()
         }
-        File out = new File("${buildDir.path}/tmp/jettyRunWar/webapp/")
+        File out = new File("${buildDir.path}")
         SiteBuilder sb = new SiteBuilder(src,out)
         sb.buildSite()
     }
@@ -131,19 +129,23 @@ task docs(dependsOn: article) {
 
 
 war {
-//    filter(ReplaceTokens, tokens: [homeUrl: homeUrl, sparqls: sparqls, iipsrv : iipsrv, demoImage : demoImage, demoObject : demoObject, demoText : demoText, detailWidth: detailWidth, 
-//htmlheader : htmlheader, htmlfooter : htmlfooter, htmlnav : htmlnav, projectlabel : projectlabel, queryforms: queryforms, mooxslt: mooxslt])
-
     filter(ReplaceTokens, tokens: [tripleserver : tripleserver, citekit : citekit, images : images, texts : texts, collections : collections, indices : indices, ict : ict, imgw : imgw, thumbw : thumbw, htmlfooter : htmlfooter, rooturl : rooturl])
 
-    from ("${buildDir}/tmp/jettyRunWar/webapp/citekit") {
-        into("citekit")
-    }
+
+    /* copy in binary images */
     from ("imgs") {
         into "imgs"
     }
+    
+    /* ... and further source that has been filtered or transformed  */
+    from ("${buildDir}/citekit") {
+        into("citekit")
+    }
     from ("${buildDir}/builtUpon") {
         into("builtUpon")
+    }
+    from ("${buildDir}/documentation") {
+        into("documentation")
     }
 
     classpath sourceSets.main.output.classesDir
@@ -151,8 +153,8 @@ war {
 }
 
 
-jettyRunWar.dependsOn([docs, imgs])
+jettyRunWar.dependsOn([docs])
 
-war.dependsOn([docs, imgs])
+war.dependsOn([docs])
 
 
