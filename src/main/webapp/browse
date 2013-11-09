@@ -16,37 +16,30 @@ response.setContentType(contentType)
 response.setHeader( "Access-Control-Allow-Origin", "*")
 
 
-String serverUrl = "@tripleserver@"
-MepGraph graph = new MepGraph(serverUrl)
 
 
-String images = "@images@"
+String getPage(String limitStr, String offsetStr) {
 
-String width = "@thumbw@"
+    Integer limitInt = limitStr as Integer
+    Integer offInt = offsetStr as Integer
 
-String limit ="9"
-if ((params.limit != null) && (params.limit != ""))  {
-    limit = params.limit
-}
-Integer limitInt = limit as Integer
+    // check if gt or lt size of collection ...
+    Integer nextOff = offInt + limitInt
 
-String offset = "0"
-if ((params.offset != null) && (params.offset != ""))  {
-    offset = params.offset
-}
-Integer offInt = offset as Integer
-
-// check if gt or lt size of collection ...
-Integer nextOff = offInt + limitInt
-
-Integer prevOff = offInt - limitInt
-if (prevOff < 0) {
-    prevOff = 0
-}
-Integer block = 3
+    Integer prevOff = offInt - limitInt
+    if (prevOff < 0) {
+        prevOff = 0
+    }
+    Integer block = 3
 
 
+    String serverUrl = "@tripleserver@"
+    MepGraph graph = new MepGraph(serverUrl)
+    String images = "@images@"
+    String width = "@thumbw@"
 
+    StringWriter writer = new StringWriter()
+    MarkupBuilder html = new MarkupBuilder(writer)
 
 html.html {
     head {
@@ -66,10 +59,10 @@ html.html {
     body {
         // add cheks on max and min vals
         p {
-            String prev = "browse?limit=${limit}&offset=${prevOff}"
+            String prev = "browse?limit=${limitStr}&offset=${prevOff}"
             a(href : prev, "back") 
             mkp.yield (" | ")
-            String nxt = "browse?limit=${limit}&offset=${nextOff}"
+            String nxt = "browse?limit=${limitStr}&offset=${nextOff}"
             a(href : nxt, "forward") 
         }
 
@@ -87,3 +80,23 @@ html.html {
         }
     }
 }
+ String base = writer.toString()
+    return base.replaceAll('INSERTFOOTER',"""@htmlfooter@""")
+}
+
+
+
+
+
+
+String limit ="9"
+if ((params.limit != null) && (params.limit != ""))  {
+    limit = params.limit
+}
+
+String offset = "0"
+if ((params.offset != null) && (params.offset != ""))  {
+    offset = params.offset
+}
+
+println getPage(limit, offset)
