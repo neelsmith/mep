@@ -57,8 +57,9 @@
         <html lang="en">
             <head>
                 <meta charset="utf-8"/>
-                <title>CITE Index</title>
-                <link href="css/steelyMep.css" rel="stylesheet"/>
+                <title>Visualize layout analysis</title>
+                <!--<link href="css/steelyMep.css" rel="stylesheet"/>-->
+                <link href="css/mep.css" rel="stylesheet"/>
                 <link href="css/graph.css" rel="stylesheet"/>
                 
                 <script src="js/jquery.min.js"/>
@@ -87,9 +88,10 @@
             </head>
             <body>  
                 <header>
-                    <xsl:call-template name="header"/>
-                </header>
+                    <!--<xsl:call-template name="header"/>-->
+                
                 <nav>
+                    <xsl:attribute name="role">navigation</xsl:attribute>
                     <p>MEP:
                         <xsl:element name="a">
                             <xsl:attribute name="href"><xsl:value-of select="$homeUrl"/></xsl:attribute>
@@ -106,6 +108,8 @@
                     </p>
                     
                 </nav>
+                    <h1>Visualize layout analysis</h1>
+                </header>
                 <article>
                 <div id="rightDiv">
                     
@@ -172,7 +176,8 @@
                 <xsl:call-template name="citekit-sources"/>
                 </article>
             <footer>
-                <xsl:call-template name="footer"/>
+              
+                @htmlfooter@
             </footer>
             </body>
         </html>
