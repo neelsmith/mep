@@ -51,13 +51,14 @@ width: 50%;
 float: right;
 width: 45%;
 }
-
+/*
 header, footer {
 		padding: 5px;
 		background-color: #f7f7f7;
 		color: #557;
 		clear: both;
 }
+*/
 
 footer { margin-top: 5px; }
 

@@ -112,7 +112,7 @@ if (request.getParameter("urn")) {
 }
 
 if (!done) {
-    println '<?xml-stylesheet type="text/xsl" href="xslt/index_image.xsl"?>\n'
+    println '<?xml-stylesheet type="text/xsl" href="xslt/index_mep_image.xsl"?>\n'
     MepGraph graph = new MepGraph(serverUrl)
     println getVisualIndex(pgUrn, graph)
 }
