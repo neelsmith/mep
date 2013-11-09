@@ -57,9 +57,8 @@ String getPage(String limitStr, String offsetStr) {
 
         body {
             // NS: add checks on max and min vals
-
+            def thumbsList = graph.getEditedThumbs()
             p {
-
                 if (prevOff < 0) {
                     mkp.yield "back"
                 } else {
@@ -67,12 +66,25 @@ String getPage(String limitStr, String offsetStr) {
                     a(href : prev, "back") 
                 }
                 mkp.yield (" | ")
-                String nxt = "browse?limit=${limitStr}&offset=${nextOff}"
-                a(href : nxt, "forward") 
+
+                if (nextOff > thumbsList.size()) {
+                    mkp.yield "next"
+                } else {
+                    String nxt = "browse?limit=${limitStr}&offset=${nextOff}"
+                    a(href : nxt, "forward") 
+                }
             }
 
-            def thumbsList = graph.getEditedThumbs()
-            for (i in offInt .. nextOff) {
+            Integer min = offInt
+            Integer max = nextOff
+
+            if (min < 0) {
+                min = 0
+            }
+            if (nextOff >= thumbsList.size()) {
+                max = thumbsList.size() - 1
+            }
+            for (i in min .. max) {
                 def thumb = thumbsList[i][1]
                 CiteUrn urn = new CiteUrn(thumbsList[i][0])
                 div(class : "thumbnail") {
