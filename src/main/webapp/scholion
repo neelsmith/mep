@@ -1,0 +1,59 @@
+/**
+* scholion
+*
+* 
+* Required parameters:
+* - urn:  either a scholion or a MEP zone
+* - img: URN of mapped image
+*
+*/
+
+import edu.holycross.shot.mep.*
+import groovy.xml.MarkupBuilder
+import edu.harvard.chs.cite.CiteUrn
+
+
+String contentType = "text/html"
+response.setContentType(contentType)
+response.setHeader( "Access-Control-Allow-Origin", "*")
+
+
+String getPage() {
+    String serverUrl = "@tripleserver@"
+    MepGraph graph = new MepGraph(serverUrl)
+    String images = "@images@"
+    String width = "@thumbw@"
+
+    StringWriter writer = new StringWriter()
+    MarkupBuilder html = new MarkupBuilder(writer)
+
+    html.html {
+        head {
+            title("Unimplemented link")
+            link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')	
+        }
+        body {
+            header {
+                nav (role: 'navigation') {
+                    mkp.yield "MEP: " 
+                    a (href : "home", "home")
+                    mkp.yield " | "
+                    a (href : "documentation/index.html", "documentation")
+                }
+                h1 ("Unimplemented lin")
+            }
+            article {
+                p("TBA")
+            }
+            footer {
+                mkp.yield "INSERTFOOTER"
+            }
+        }
+    }
+    String base = writer.toString()
+    return base.replaceAll('INSERTFOOTER',"""@htmlfooter@""")
+}
+// end of getPage() method
+
+
+println getPage()

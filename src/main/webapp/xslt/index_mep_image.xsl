@@ -10,8 +10,7 @@
     
     <!-- Linking URLs for nav section -->
     <xsl:variable name="homeUrl">home</xsl:variable>
-    <!--
-    <xsl:variable name="formsUrl">@queryforms@</xsl:variable> -->
+    
     
     <!-- Variables for CSS Classes and HTML IDs -->
     <xsl:variable name="canvasId">canvas</xsl:variable>
@@ -28,15 +27,10 @@
     <!-- Variables for URLs of services, images, etc. -->
     <xsl:variable name="imgURL">@images@</xsl:variable>
     <xsl:variable name="ictURL">@ict@?urn=</xsl:variable>
-    <xsl:variable name="thisURL">@indices@</xsl:variable>
+    <xsl:variable name="linkURL">@indices@</xsl:variable>
     
     <!-- Variables for RDF verbs, etc. -->
     <xsl:variable name="illustratesVerb">http://www.homermultitext.org/cite/rdf/illustrates</xsl:variable>
-    
-    <!-- Variables for URLs of services, images, etc. -->
-   <!-- <xsl:variable name="imgURL">http://beta.hpcc.uh.edu/tomcat/hmt/images</xsl:variable>
-    <xsl:variable name="ictURL">http://localhost:8080/citeservlet/ict.html?urn=</xsl:variable>
-    <xsl:variable name="thisURL">http://localhost:8080/citeservlet/indices</xsl:variable>-->
     
     
     <xsl:variable name="imageThumbURL"><xsl:value-of select="$imgURL"
@@ -58,7 +52,7 @@
             <head>
                 <meta charset="utf-8"/>
                 <title>Visualize layout analysis</title>
-                <!--<link href="css/steelyMep.css" rel="stylesheet"/>-->
+                
                 <link href="css/mep.css" rel="stylesheet"/>
                 <link href="css/graph.css" rel="stylesheet"/>
                 
@@ -82,14 +76,12 @@
                 <xsl:element name="script">
                     <xsl:attribute name="type">text/javascript</xsl:attribute>
                    <xsl:attribute name="src">@citekit@</xsl:attribute>
-                    <!--<xsl:attribute name="src">http://localhost/citekit/js/cite-jq.js</xsl:attribute>-->
-                 </xsl:element>
+                </xsl:element>
                
             </head>
             <body>  
                 <header>
-                    <!--<xsl:call-template name="header"/>-->
-                
+                   
                 <nav>
                     <xsl:attribute name="role">navigation</xsl:attribute>
                     <p>MEP:
@@ -97,13 +89,6 @@
                             <xsl:attribute name="href"><xsl:value-of select="$homeUrl"/></xsl:attribute>
                             Home
                         </xsl:element>
-                        <!--
-                        :
-                        <xsl:element name="a">
-                            <xsl:attribute name="href"><xsl:value-of select="$formsUrl"/></xsl:attribute>
-                            Look up material by URN
-                        </xsl:element>
-                        -->
                         
                     </p>
                     
@@ -116,18 +101,13 @@
                     <div id="texts">
                         
                         <xsl:if test="//citeindex:node[(@v = $illustratesVerb) and (@type = 'object')]">
-                          <!-- <xsl:for-each select="//citeindex:node[(@v = $illustratesVerb) and (@type = 'object')]">
-                               <xsl:apply-templates select="current()" mode="object"/>
-                              
-                            </xsl:for-each>-->
-                            
                             <xsl:call-template name="objectContainer"/>
                         </xsl:if>
                         
                         <xsl:apply-templates
                             select="//citeindex:reply/citeindex:graph/citeindex:sequence"/>
                     </div>
-                    <!--<p style="clear: both;">- end data -</p>-->
+                    
                    
                 </div>
                 <div id="leftDiv">
@@ -157,9 +137,6 @@
                     <xsl:call-template name="makeCanvas"/>
                     
                     <div id="objects">
-                        <!--<h3>Others</h3>-->
-                        <!--<xsl:apply-templates select="//citeindex:reply/citeindex:graph/citeindex:node[(@type = 'object') and (@v != 'http://www.homermultitext.org/cite/rdf/illustrates')]"
-                        />-->
                         <ul><xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'image')]"
                         >
                             <li><strong>Image: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each>
@@ -168,7 +145,7 @@
                             ><li><strong>Object: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each>
                         </ul>
                         <ul>
-                        <!--Texts: --><xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'text')]"
+                        <xsl:for-each select="//citeindex:reply/citeindex:graph/citeindex:node[(@v != 'http://www.homermultitext.org/cite/rdf/illustrates') and (@v != 'http://www.homermultitext.org/cite/rdf/hasExtendedRef') and (@type = 'text')]"
                             ><li><strong>Text: </strong><xsl:apply-templates select="current()"/></li></xsl:for-each></ul>
                     </div>
                    
@@ -238,11 +215,6 @@
           </xsl:attribute>
           <xsl:attribute name="id"><xsl:value-of select="$thisSeqId"/></xsl:attribute>
           
-          <!--<xsl:element name="blockquote">
-             <xsl:attribute name="cite"><xsl:value-of select="@urn"/></xsl:attribute>
-              <xsl:attribute name="class">cite-cts svc-graph-cts</xsl:attribute>
-          <strong><xsl:value-of select="@urn"/></strong>
-          </xsl:element>-->
           
           <xsl:apply-templates select="citeindex:value/citeindex:node" mode="visinv-text">
               <xsl:with-param name="seqId"><xsl:value-of select="$thisSeqId"/></xsl:with-param>
@@ -270,7 +242,7 @@
                     </xsl:element>
                 </xsl:element>
                 <xsl:element name="a">
-                    <xsl:attribute name="href"><xsl:value-of select="$thisURL"/>?urn=<xsl:value-of select=".//citeindex:value"/></xsl:attribute>
+                    <xsl:attribute name="href"><xsl:value-of select="$linkURL"/>?urn=<xsl:value-of select=".//citeindex:value"/>&amp;img=<xsl:value-of select="$imageURN"/></xsl:attribute>
                     see links
                 </xsl:element>
             </div>
@@ -322,7 +294,7 @@
                         </xsl:choose>
                         <xsl:element name="a">
                             <xsl:attribute name="class">block-link</xsl:attribute>
-                            <xsl:attribute name="href"><xsl:value-of select="$thisURL"/>?urn=<xsl:value-of select=".//citeindex:value"/></xsl:attribute>
+                            <xsl:attribute name="href"><xsl:value-of select="$linkURL"/>?urn=<xsl:value-of select=".//citeindex:value"/>&amp;img=<xsl:value-of select="$imageURN"/></xsl:attribute>
                             see links
                         </xsl:element>    
                     </xsl:element>
