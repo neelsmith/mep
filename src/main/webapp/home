@@ -21,17 +21,27 @@ MarkupBuilder html = new MarkupBuilder(writer)
 html.html {
     head {
         title("Mise en page")
+
 	link(type : 'text/css',  rel : 'stylesheet',  href : 'css/mep.css', title : 'CSS stylesheet')
     }
     
     body {
     
     	header {
+            div ('class' : "container") {
+                div ('class' : "thumb") {
+                    img ('class' : "logotop", src : "imgs/logo-anvil.png")
+                }
+                div(class : "content") {
+                    h1("Mise en page: automated analysis of the layout of the Venetus A manuscript")
+                }
+            }
             nav (role: 'navigation') {
+                img (src : "imgs/logo.png",  'class' : "logobottom")
                 mkp.yield "MEP "
                     a (href : "documentation/index.html", "documentation")
             }
-            h1("Mise en page: automated analysis of the layout of the Venetus A manuscript")
+
     	}
     	
     	article {
