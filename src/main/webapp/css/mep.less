@@ -1,0 +1,125 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic);
+
+
+/* dimensions for anvil logo */
+@minlogow: 65px;
+@safety: 14px;
+
+/* valid colors */
+@mepblack: rgb(41,25,15);
+@mepblue: rgb(20,70,120);
+@mepbrown: rgb(151,96,46);
+
+
+/* Principal font family */
+@bodyfont: Lato, Georgia, sans-serif;
+@heavy: 700;
+@light: 300;
+
+@margin: 4em;
+
+/* Further font deff: */
+/* light and regular weights for body copy */
+/* use  bold or black weight for pull quotes */
+
+/* Use Georgia as secondary font: */
+/* bold and bold-italic for impact, pull quotes and headers */
+
+
+
+article, footer {
+    margin: @margin;
+}
+
+body {
+    font-family: @bodyfont;
+    color : @mepblack;
+    header {
+	div.container {
+	    overflow: auto;
+	    border-bottom: solid 1px @mepblue;
+
+	    div.thumb {
+		float: left;
+		img.logotop {
+		    padding-left: 15px;
+		    padding-right: 15px;
+		    display: block;
+		}
+}
+		div.content {
+		    vertical-align: text-bottom;
+		    h1 {
+			font-weight: @light;
+		    }
+		}
+	}
+
+	nav {
+	    clear: both;
+	}
+	.logobottom {
+	    float: left;
+	    padding-left: 15px;
+	    padding-right: 15px;
+	    padding-bottom: 15px;
+	}
+    }
+    
+    article {
+	clear: both;
+    }
+}
+
+
+
+a {
+    color : @mepblue;
+    font-weight : @heavy;
+}
+
+a:hover {
+   text-decoration : underline;
+}
+
+/* Figure out where we need these ... */
+/*
+#leftDiv, #rightDiv {
+    padding-left: 5px;
+}
+
+#leftDiv {
+    width: 45%;
+    float : left;
+}
+
+#rightDiv {
+    float: right;
+    width: 45%;
+}
+*/
+
+/* used in browse image display */
+
+div.thumbnail {
+    float : left;
+    padding : 0.2em;
+}
+
+
+
+/* used in warnings */
+.warning {
+    /*background-color : #EEF;*/
+    /*padding : 1.2em;*/
+    border : solid 2px @mepblue;
+}
+
+.warning:before {
+    content: url('http://localhost/warning-small.png')
+}
+
+
+footer {
+    clear : both;
+}

@@ -1,10 +1,59 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic);
-
-body {
-    font-family: Lato, sans-serif;
+/* dimensions for anvil logo */
+/* valid colors */
+/* Principal font family */
+/* Further font deff: */
+/* light and regular weights for body copy */
+/* use  bold or black weight for pull quotes */
+/* Use Georgia as secondary font: */
+/* bold and bold-italic for impact, pull quotes and headers */
+article,
+footer {
+  margin: 4em;
 }
-
-
+body {
+  font-family: Lato, Georgia, sans-serif;
+  color: #29190f;
+}
+body header div.container {
+  overflow: auto;
+  border-bottom: solid 1px #144678;
+}
+body header div.container div.thumb {
+  float: left;
+}
+body header div.container div.thumb img.logotop {
+  padding-left: 15px;
+  padding-right: 15px;
+  display: block;
+}
+body header div.container div.content {
+  vertical-align: text-bottom;
+}
+body header div.container div.content h1 {
+  font-weight: 300;
+}
+body header nav {
+  clear: both;
+}
+body header .logobottom {
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+body article {
+  clear: both;
+}
+a {
+  color: #144678;
+  font-weight: 700;
+}
+a:hover {
+  text-decoration: underline;
+}
+/* Figure out where we need these ... */
+/*
 #leftDiv, #rightDiv {
     padding-left: 5px;
 }
@@ -18,25 +67,23 @@ body {
     float: right;
     width: 45%;
 }
-
-
+*/
+/* used in browse image display */
 div.thumbnail {
-    float : left;
-    padding : 0.2em;
+  float: left;
+  padding: 0.2em;
 }
-
+/* used in warnings */
 .warning {
-    background-color : #EEF;
-    padding : 1.2em;
-    border : solid 1px rgb(50,150,245);
-}
+  /*background-color : #EEF;*/
 
+  /*padding : 1.2em;*/
+
+  border: solid 2px #144678;
+}
 .warning:before {
-    content: url('@rooturl@/imgs/bluewarning.png')
+  content: url('http://localhost/warning-small.png');
 }
-
-
 footer {
-    clear : both;
-    margin-top: 1.8em;
+  clear: both;
 }

@@ -93,7 +93,7 @@
                     </p>
                     
                 </nav>
-                    <h1>Visualize layout analysis</h1>
+                    <h1>Visualize layout analysis: <xsl:value-of select="//citeindex:request/citeindex:urn"/></h1>
                 </header>
                 <article>
                 <div id="rightDiv">
@@ -127,11 +127,12 @@
                         <xsl:attribute name="href"><xsl:value-of select="$imageMooUrl"/><xsl:value-of select="//citeindex:request/citeindex:urn"/></xsl:attribute>
                         zoom
                     </xsl:element>
-                    |
+                    <!--  |
+                    
                     <xsl:element name="a">
                         <xsl:attribute name="href"><xsl:value-of select="$imageGIPUrl"/><xsl:value-of select="//citeindex:request/citeindex:urn"/></xsl:attribute>
                         more info
-                    </xsl:element>
+                    </xsl:element> -->
                     | (click image to re-center)
                     
                     <xsl:call-template name="makeCanvas"/>

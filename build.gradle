@@ -79,12 +79,6 @@ group = "edu.holycross.shot"
 version = "0.1.0"
 
 
-task imgs (type: Copy ) {
-    from  "imgs"
-    into "${buildDir}/imgs"
-}
-
-
 task setupCK (type: Copy ) {
     from  zipTree(configurations.ck.files.asList()[0])
     into "${buildDir}/citekit"
@@ -136,7 +130,12 @@ war {
     from ("imgs") {
         into "imgs"
     }
-    
+
+    from ("logos") {
+        into "imgs"
+    }
+
+
     /* ... and further source that has been filtered or transformed  */
     from ("${buildDir}/citekit") {
         into("citekit")
@@ -147,6 +146,13 @@ war {
     from ("${buildDir}/documentation") {
         into("documentation")
     }
+
+
+    /* and css skinning of citekit */
+    from("ckmods") {
+        into("citekit/css")
+    }       
+
 
     classpath sourceSets.main.output.classesDir
     classpath configurations.runtime
