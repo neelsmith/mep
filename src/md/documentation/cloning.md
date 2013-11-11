@@ -32,4 +32,4 @@ To build a war file to install in your own servlet container:
 
 ##Configuration options
 
-TBA
+Full details TBA.

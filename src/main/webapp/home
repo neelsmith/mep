@@ -56,6 +56,7 @@ html.html {
                 li {
                     mkp.yield "Analysis by "
                     a(href : "builtUpon/index.html", "Churik and Smith")
+		    mkp.yield " (Full interactive text to be added in test 4.)"
                 }
                 li {
                     a (href : "documentation/licenses.html", "Licenses")
@@ -88,6 +89,7 @@ html.html {
                     mkp.yield "Select a specific page by reference to "
                     em("Iliad")
                     mkp.yield " line."
+		    mkp.yield(" Scheduled to be added in test phase 1.")
                 }
             }
 
@@ -96,9 +98,10 @@ html.html {
                 mkp.yield "By book of the "
                 em("Iliad")
             }
+	    p("Scheduled to be added in test 2.")
 
             h3("Summary analysis of the manuscript")
-
+	    p("Scheduled to be added in test 3.")	
         }
         footer {
             mkp.yield "INSERTFOOTER"
