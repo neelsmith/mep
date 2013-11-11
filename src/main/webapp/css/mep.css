@@ -18,6 +18,7 @@ body {
 body header div.container {
   overflow: auto;
   border-bottom: solid 1px #144678;
+  padding: 0px;
 }
 body header div.container div.thumb {
   float: left;
@@ -25,6 +26,7 @@ body header div.container div.thumb {
 body header div.container div.thumb img.logotop {
   padding-left: 15px;
   padding-right: 15px;
+  padding-top: 15px;
   display: block;
 }
 body header div.container div.content {
@@ -52,22 +54,19 @@ a {
 a:hover {
   text-decoration: underline;
 }
-/* Figure out where we need these ... */
-/*
-#leftDiv, #rightDiv {
-    padding-left: 5px;
-}
-
-#leftDiv {
-    width: 45%;
-    float : left;
-}
-
+/* Used in vapage to juxtapose image and text summary */
+#leftDiv,
 #rightDiv {
-    float: right;
-    width: 45%;
+  padding-left: 5px;
 }
-*/
+#leftDiv {
+  width: 45%;
+  float: left;
+}
+#rightDiv {
+  float: right;
+  width: 45%;
+}
 /* used in browse image display */
 div.thumbnail {
   float: left;
