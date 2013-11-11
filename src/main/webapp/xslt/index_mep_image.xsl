@@ -81,9 +81,20 @@
             </head>
             <body>  
                 <header>
-                   
+                   <div class="container">
+                       <div class="thumb">
+                           <img src="imgs/logo-anvil.png" alt="Academic Anvil logo" class="logotop"/>
+                       </div>
+                   </div>
+                    <div class="content">
+                        <h1>Visualize layout analysis: <xsl:value-of select="//citeindex:request/citeindex:urn"/></h1>
+                        
+                    </div>
                 <nav>
                     <xsl:attribute name="role">navigation</xsl:attribute>
+                    
+                    <img src="imgs/logo.png" alt="Anvil text logo" class="logobottom"/>
+                    
                     <p>MEP:
                         <xsl:element name="a">
                             <xsl:attribute name="href"><xsl:value-of select="$homeUrl"/></xsl:attribute>
@@ -93,8 +104,7 @@
                     </p>
                     
                 </nav>
-                    <h1>Visualize layout analysis: <xsl:value-of select="//citeindex:request/citeindex:urn"/></h1>
-                </header>
+               </header>
                 <article>
                 <div id="rightDiv">
                     

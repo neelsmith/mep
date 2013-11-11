@@ -47,13 +47,22 @@ String getPage(String limitStr, String offsetStr) {
         }
         body {
             header {
+                div ('class' : "container") {
+                    div ('class' : "thumb") {
+                        img ('class' : "logotop", src : "imgs/logo-anvil.png")
+                    }
+                    div(class : "content") {
+                        h1 ("Edited pages of the Venetus A manuscript")
+                    }
+                }
                 nav (role: 'navigation') {
+                    img (src : "imgs/logo.png",  'class' : "logobottom")
                     mkp.yield "MEP: " 
                     a (href : "home", "home")
                     mkp.yield " | "
                     a (href : "documentation/index.html", "documentation")
                 }
-                h1 ("Edited pages of the Venetus A manuscript")
+
             }
             article {
 
